@@ -17,6 +17,8 @@ local.properties
 
 # Eclipse Core
 .project
+.pyc
+
 
 # External tool builders
 .externalToolBuilders/
