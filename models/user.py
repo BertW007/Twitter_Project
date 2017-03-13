@@ -35,7 +35,10 @@ class User(object):
             self.__id = cursor.lastrowid
             return True
         else:
-            return False
+            sql = "UPDATE Users SET name='{}',email='{}',hashed_password='{}' WHERE user_id={};".format(self.username, self.email, self.hashed_password, self.__id)
+            print(sql)
+            cursor.execute(sql)
+            return True
     
     @staticmethod
     def load_user_by_id(cursor, id):

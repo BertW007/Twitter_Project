@@ -49,7 +49,6 @@ def testReadUser():
             print("Not connected...")
             
 def testAllUsers():
-#     i = None
     
     try:
         cnx = connect(user=user, password=password, host=host, database=database)
@@ -69,9 +68,34 @@ def testAllUsers():
          
     except TypeError:
             print("Not connected...")
+            
+def testModifyUser():
+    
+    try:
+        cnx = connect(user=user, password=password, host=host, database=database)
+        print("Connected...")
+        cursor = cnx.cursor()  
+        try:      
+            mod_user = User.load_user_by_id(cursor,5)
+            print(mod_user.username, '-' , mod_user.email)
+            mod_user.username = 'smeagol'
+            mod_user.email = 'smeagol@ring.com'
+            print(mod_user.username, '-' , mod_user.email)
+            mod_user.save_to_db(cursor)
+            
+        except TypeError:
+            print('There is no such record in database...')
+            
+        cnx.commit()           
+        cursor.close()
+        cnx.close()
+        print('Disconnected...')
+         
+    except TypeError:
+            print("Not connected...")
     
     
 
 
 if __name__ == "__main__":
-    testAllUsers()
+    testModifyUser()
