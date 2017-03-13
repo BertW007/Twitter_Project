@@ -53,5 +53,21 @@ class User(object):
         else:
             return None
     
+    @staticmethod
+    def load_all_users(cursor):
+        sql = "SELECT user_id, name, email, hashed_password FROM Users"
+        ret = []
+        result = cursor.execute(sql)
+        data = cursor.fetchall()
+
+        for row in data:
+            loaded_user = User()
+            loaded_user.__id = row[0]
+            loaded_user.username = row[1]
+            loaded_user.email = row[2]
+            loaded_user.__hashed_password = row[3]
+            ret.append(loaded_user)
+        return ret
+    
                             
                 
