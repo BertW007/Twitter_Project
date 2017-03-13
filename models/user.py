@@ -1,4 +1,4 @@
-from models.crypto.crypto import *
+from models.crypto import *
 
 class User(object):
    
@@ -21,9 +21,9 @@ class User(object):
     def hashed_password(self):
         return self.__hashed_password
     
-    def set_password(self, password, salt):
-        self.__hashed_password = \
-        password_hash(password, salt)
+    def set_password(self, password):
+        salt=generate_salt()
+        self.__hashed_password =password_hash(password, salt)
         
     def save_to_db(self, cursor):
         if self.__id == -1:
@@ -36,4 +36,22 @@ class User(object):
             return True
         else:
             return False
+    
+#     @staticmethod
+#     def load_user_by_id(cursor, id):
+#         sql = "SELECT id, username, email, hashed_passsword FROM USERS WHERE id={}".format(id)
+#         result = cursor.execute(sql)
+#         data = cursor.fetchone()
+#         
+#         if data is not None:
+#             loaded_user = User()
+#             loaded_user.__id = data[0]
+#             loaded_user.username = data[1]
+#             loaded_user.email = data[2]
+#             loaded_user.__hashed_password = data[3]
+#             return loaded_user
+#         else:
+#             return None
+    
+                            
                 

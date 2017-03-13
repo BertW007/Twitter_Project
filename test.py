@@ -1,4 +1,4 @@
-from models.users import User
+from models.user import User
 from mysql.connector import connect
 from mysql.connector.errors import ProgrammingError
 
@@ -9,22 +9,21 @@ database = 'twitter_db'
 
 def testCreateUser():
     
+    user1 = User()
+    user1.name = 'frodo'
+    user1.email = 'fb@ring.com'
+    user1.set_password('precious')
+    
     try:
         cnx = connect(user=user, password=password, host=host, database=database)
         print("Connected...")
-#         cursor = cnx.cursor()  
-#              
-#         query = 'INSERT INTO Cinemas (name,adress) VALUES ("{}","{}")'.format(options.name,options.adress)
-#         print(query)
-#         try:
-#             cursor.execute(query)
-#             cnx.commit()
-#             print('Do bazy danych Cinemas dodano kino o id={}'.format(cursor.lastrowid))       
-#         except (DatabaseError, ProgrammingError):
-#             print('Nie udało się dodać kina')
-#                   
-#         cursor.close()
-#         cnx.close()
+        cursor = cnx.cursor()  
+              
+        user1.save_to_db(cursor)
+        
+        cnx.commit()           
+        cursor.close()
+        cnx.close()
         print('Disconnected...')
          
     except ProgrammingError:
