@@ -8,18 +8,17 @@ host = 'localhost'
 database = 'twitter_db'
 
 def testCreateUser():
-    
-    user1 = User()
-    user1.name = 'frodo'
-    user1.email = 'fb@ring.com'
-    user1.set_password('precious')
+    new_user = User()
+    new_user.name = 'frodo'
+    new_user.email = 'fb@ring.com'
+    new_user.set_password('precious')
     
     try:
         cnx = connect(user=user, password=password, host=host, database=database)
         print("Connected...")
         cursor = cnx.cursor()  
               
-        user1.save_to_db(cursor)
+        new_user.save_to_db(cursor)
         
         cnx.commit()           
         cursor.close()
@@ -28,7 +27,29 @@ def testCreateUser():
          
     except ProgrammingError:
             print("Not connected...")
+    
+def testReadUser():
+    
+    try:
+        cnx = connect(user=user, password=password, host=host, database=database)
+        print("Connected...")
+        cursor = cnx.cursor()  
+        try:      
+            read_user = User.load_user_by_id(cursor,2)
+            print(read_user.username, '-' , read_user.email)
+        except AttributeError:
+            print('There is no such record in database...')
+            
+        cnx.commit()           
+        cursor.close()
+        cnx.close()
+        print('Disconnected...')
+         
+    except TypeError:
+            print("Not connected...")
+    
+    
 
 
 if __name__ == "__main__":
-    testCreateUser()
+    testReadUser()

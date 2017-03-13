@@ -37,21 +37,21 @@ class User(object):
         else:
             return False
     
-#     @staticmethod
-#     def load_user_by_id(cursor, id):
-#         sql = "SELECT id, username, email, hashed_passsword FROM USERS WHERE id={}".format(id)
-#         result = cursor.execute(sql)
-#         data = cursor.fetchone()
-#         
-#         if data is not None:
-#             loaded_user = User()
-#             loaded_user.__id = data[0]
-#             loaded_user.username = data[1]
-#             loaded_user.email = data[2]
-#             loaded_user.__hashed_password = data[3]
-#             return loaded_user
-#         else:
-#             return None
+    @staticmethod
+    def load_user_by_id(cursor, id):
+        sql = "SELECT user_id, name, email, hashed_password FROM Users WHERE user_id={}".format(id)
+        result = cursor.execute(sql)
+        data = cursor.fetchone()
+         
+        if data is not None:
+            loaded_user = User()
+            loaded_user.__id = data[0]
+            loaded_user.username = data[1]
+            loaded_user.email = data[2]
+            loaded_user.__hashed_password = data[3]
+            return loaded_user
+        else:
+            return None
     
                             
                 
