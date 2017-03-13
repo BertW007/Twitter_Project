@@ -1,5 +1,7 @@
 from models.crypto import *
 
+
+
 class User(object):
    
     __id = None
@@ -72,5 +74,11 @@ class User(object):
             ret.append(loaded_user)
         return ret
     
+    def delete(self, cursor):
+        sql = "DELETE FROM Users WHERE user_id={}".format(self.__id)
+        cursor.execute(sql)
+        self.__id = -1
+        return True
+        
                             
                 
