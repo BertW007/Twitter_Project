@@ -26,9 +26,9 @@ def disconnect():
 
 def testCreateUser():
     new_user = User()
-    new_user.name = 'gollum'
-    new_user.email = 'smeagol@fish.com'
-    new_user.set_password('gollum')
+    new_user.name = 'sam'
+    new_user.email = 'sam@gamgee.com'
+    new_user.set_password('sam',None)
     
     try:
         cnx = connect(user=user, password=password, host=host, database=database)
@@ -157,4 +157,4 @@ def testCreateTweet():
 
 
 if __name__ == "__main__":
-    testCreateTweet()
+    testCreateUser()

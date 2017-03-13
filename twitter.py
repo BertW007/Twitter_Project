@@ -3,6 +3,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 from mysql.connector import connect
 from mysql.connector.errors import ProgrammingError
 from models.tweet import *
+from models.crypto import *
 from datetime import datetime
 
 def connect_db():
@@ -21,19 +22,27 @@ def connect_db():
 app = Flask(__name__)
  
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     error = None
-#     if request.method == 'POST':
-#         if request.form['username'] != app.config['USERNAME']:
-#             error = 'Invalid username'
-#         elif request.form['password'] != app.config['PASSWORD']:
-#             error = 'Invalid password'
-#         else:
+@app.route('/login', methods=['GET', 'POST'])
+def login():     
+    error = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        cnx = connect_db()  
+        cursor = cnx.cursor()
+        sql = "SELECT hashed_password FROM Users WHERE email='{}'".format(username)
+        print(sql)
+        result = cursor.execute(sql)
+        data = cursor.fetchone()
+        if data is None:
+            error = 'Invalid username'
+        elif not check_password(password, data[0]):
+            error = 'Invalid password'
+        else:
 #             session['logged_in'] = True
 #             flash('You were logged in')
-#             return redirect(url_for('twitter'))
-#     return render_template('login.html', error=error)
+            return redirect(url_for('all_tweets'))
+    return render_template('login.html', error=error)
 
 @app.route("/all_tweets", methods=['GET','POST'])
 def all_tweets(): 

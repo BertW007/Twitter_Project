@@ -23,8 +23,7 @@ class User(object):
     def hashed_password(self):
         return self.__hashed_password
     
-    def set_password(self, password):
-        salt=generate_salt()
+    def set_password(self, password,salt):
         self.__hashed_password =password_hash(password, salt)
         
     def save_to_db(self, cursor):
