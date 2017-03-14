@@ -30,7 +30,7 @@ class User(object):
         if self.__id == -1:
             sql_guery = """
                 INSERT INTO Users(name,hashed_password,email)
-                VALUES('{}','{}','{}');""".format(self.name,self.hashed_password,self.email)
+                VALUES('{}','{}','{}');""".format(self.username,self.hashed_password,self.email)
                 
             cursor.execute(sql_guery)
             self.__id = cursor.lastrowid

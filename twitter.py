@@ -3,6 +3,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 from mysql.connector import connect
 from mysql.connector.errors import ProgrammingError
 from models.tweet import *
+from models.user import *
 from models.crypto import *
 from datetime import datetime
 
@@ -31,7 +32,6 @@ def login():
         cnx = connect_db()  
         cursor = cnx.cursor()
         sql = "SELECT user_id,hashed_password FROM Users WHERE email='{}'".format(username)
-        print(sql)
         result = cursor.execute(sql)
         data = cursor.fetchone()
         if data is None:
@@ -41,10 +41,44 @@ def login():
         else:
             session['logged_in'] = True
             session['user_id'] = data[0]
-            
 #             flash('You were logged in')
             return redirect(url_for('all_tweets'))
     return render_template('login.html', error=error)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():     
+    error = None
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        
+        cnx = connect_db()  
+        cursor = cnx.cursor()
+        sql = "SELECT user_id,hashed_password FROM Users WHERE email='{}'".format(email)
+        print(sql)
+        result = cursor.execute(sql)
+        data = cursor.fetchone()
+        if data is None:
+            if request.form['password1'] == request.form['password2']:
+                password = request.form['password1']
+                
+                user = User()
+                user.username = username
+                user.email = email
+                user.set_password(password,None)
+                
+                user.save_to_db(cursor)
+                cnx.commit()
+                
+                session['logged_in'] = True
+                session['user_id'] = cursor.lastrowid
+                return redirect(url_for('all_tweets'))
+            else:
+                error='Different Passwords'
+        else:
+            error = 'User with this email already exist'
+            
+    return render_template('register.html', error=error)
 
 @app.route("/all_tweets", methods=['GET','POST'])
 def all_tweets():
