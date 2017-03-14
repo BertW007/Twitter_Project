@@ -91,7 +91,7 @@ def all_tweets():
             html = '''
                     <table style="width:50%; margin-left:auto; margin-right:auto;">
                       <tr>
-                      <td colspan = "2">
+                      <td colspan = "3">
                           <form method = 'POST'>
                              <div class="form-group">
                               <label for="new_tweet"><h3>New Tweet:</h3></label>
@@ -104,18 +104,21 @@ def all_tweets():
                       <tr>
                         <th align="left"><h3>All Tweets:</h3></th>
                       </tr>
-                      <tr><td colspan="2"><hr></td></tr>
+                      <tr><td colspan="3"><hr></td></tr>
                       <tr>
                         <th align="left">Tweet Text</th>
+                        <th align="right">Author</th>
                         <th align="right">Date Added</th>
                       </tr>
-                      <tr><td colspan="2"><hr></td></tr>'''   
+                      <tr><td colspan="3"><hr></td></tr>'''   
             for tweet in tweets:
+                user = User.load_user_by_id(cnx.cursor(),tweet.user_id)
                 html +='''
                         <tr>
                             <td>{}</td>
                             <td align="right">{}</td>
-                          </tr>'''.format(tweet.text,datetime.date(tweet.creation_date))
+                            <td align="right">{}</td>
+                          </tr>'''.format(tweet.text,user.email,datetime.date(tweet.creation_date))
                 
             html += '</table>'
             return html
@@ -135,18 +138,22 @@ def all_tweets():
         return redirect(url_for('login'))
     
 @app.route("/tweets_by_user_id/<user_id>", methods=['GET','POST'])
-def tweets_by_user_id(user_id): 
-    html = '<h3>User id= {} Twits:</h3>'.format(user_id)
-    
+def tweets_by_user_id(user_id):   
     if request.method == "GET":
         cnx = connect_db()  
         tweets=Tweet.load_tweets_by_user_id(cnx.cursor(),user_id)
-        html += '''
-                <table style="width:50%">
+        user = User.load_user_by_id(cnx.cursor(),user_id)
+        html = '''
+                <table style="width:50%; margin-left:auto; margin-right:auto;">
                   <tr>
-                    <th align="left">Tweet Text</th>
-                    <th align="right">Date Added</th>
-                  </tr>'''   
+                        <th align="left"><h3>All Tweets by {}:</h3></th>
+                      </tr>
+                      <tr><td colspan="2"><hr></td></tr>
+                      <tr>
+                        <th align="left">Tweet Text</th>
+                        <th align="right">Date Added</th>
+                      </tr>
+                      <tr><td colspan="2"><hr></td></tr>'''.format(user.email)   
         for tweet in tweets:
             html +='''
                     <tr>
