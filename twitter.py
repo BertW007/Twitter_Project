@@ -4,6 +4,7 @@ from mysql.connector import connect
 from mysql.connector.errors import ProgrammingError
 from models.tweet import *
 from models.user import *
+from models.comment import *
 from models.crypto import *
 from datetime import datetime
 
@@ -96,7 +97,7 @@ def all_tweets():
                              <div class="form-group">
                               <label for="new_tweet"><h3>New Tweet:</h3></label>
                               <textarea class="form-control" rows="5" name="new_tweet" style="width:100%"></textarea>
-                              <input type="submit" value="Submit">
+                              <input type="submit" value="Tweet">
                              </div>
                           </form>
                       </td>
@@ -130,7 +131,7 @@ def all_tweets():
             tweet.creation_date = datetime.now()
             
             cnx = connect_db()
-            tweet.add_edit_tweet(cnx.cursor())
+            tweet.add_tweet(cnx.cursor())
             cnx.commit()
             
             return redirect(url_for('all_tweets'))
@@ -190,7 +191,31 @@ def tweet_by_id(id):
                   </tr>
                   <tr><td colspan="4"><hr></td></tr>
                   '''.format(tweet.id,tweet.text,user.email, datetime.date(tweet.creation_date),datetime.time(tweet.creation_date)) 
-    return html
+        html += '''
+        <tr>
+                  <td colspan = "3">
+                      <form method = 'POST'>
+                         <div class="form-group">
+                          <label for="new_comment"><h3>New Comment:</h3></label>
+                          <textarea class="form-control" rows="5" name="new_comment" style="width:100%"></textarea>
+                          <input type="submit" value="Comment">
+                         </div>
+                      </form>
+                  </td>
+                  </tr>
+        '''
+        return html
+    elif request.method == "POST":
+            comment = Comment()
+            comment.user_id = session['user_id']
+            comment.tweet_id = id
+            comment.text = request.form['new_comment']
+            comment.creation_date = datetime.now()
+            
+            cnx = connect_db()
+            comment.add_comment(cnx.cursor())
+            cnx.commit()
+            return redirect(('tweet_by_id/{}'.format(id)))
 
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
