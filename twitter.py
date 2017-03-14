@@ -173,7 +173,8 @@ def tweet_by_id(id):
     if request.method == "GET":
         cnx = connect_db()  
         tweet = Tweet.load_tweet_by_id(cnx.cursor(),id)
-        user = User.load_user_by_id(cnx.cursor(),tweet.user_id) 
+        user = User.load_user_by_id(cnx.cursor(),tweet.user_id)
+        comments = Comment.load_comments_by_tweet_id(cnx.cursor(),id) 
         html ='''
                 <table style="width:50%; margin-left:auto; margin-right:auto;">
                   <tr>
@@ -191,9 +192,34 @@ def tweet_by_id(id):
                   </tr>
                   <tr><td colspan="4"><hr></td></tr>
                   '''.format(tweet.id,tweet.text,user.email, datetime.date(tweet.creation_date),datetime.time(tweet.creation_date)) 
-        html += '''
-        <tr>
-                  <td colspan = "3">
+        html +='''
+                <table style="width:50%; margin-left:auto; margin-right:auto;">
+                          <tr>
+                             
+                          </tr>
+                          <tr>
+                             <th align="left"><h4>Comments</h4></th>
+                             <th align="right"><h4>Author</h4></th>
+                             <th align="right"><h4>Creation Date</h4></th>
+                          </tr>
+                          <tr><td colspan="4"><hr></td></tr>
+                          
+                          
+        '''
+        for comment in comments:
+            user_com = User.load_user_by_id(cnx.cursor(),comment.user_id)
+            html +='''
+                    <tr>
+                        <td align="left">{}</td>
+                        <td align="right">{}</td>
+                        <td align="right">{}</td>
+                      </tr>
+                      '''.format(comment.text,user_com.email,datetime.date(comment.creation_date))
+            
+        
+        html += '''<tr><td colspan="4"><hr></td></tr>
+                <tr>
+                  <td colspan = "4">
                       <form method = 'POST'>
                          <div class="form-group">
                           <label for="new_comment"><h3>New Comment:</h3></label>
@@ -202,7 +228,7 @@ def tweet_by_id(id):
                          </div>
                       </form>
                   </td>
-                  </tr>
+                </tr>
         '''
         return html
     elif request.method == "POST":
