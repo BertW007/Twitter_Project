@@ -34,7 +34,7 @@ class Tweet(object):
     
     @staticmethod
     def load_tweet_by_id(cursor, id):
-        sql = "SELECT id, text, creation_date FROM Tweets WHERE id={}".format(id)
+        sql = "SELECT id, text, creation_date,user_id FROM Tweets WHERE id={}".format(id)
         result = cursor.execute(sql)
         data = cursor.fetchone()
          
@@ -43,6 +43,7 @@ class Tweet(object):
             loaded_tweet.__id = data[0]
             loaded_tweet.text = data[1]
             loaded_tweet.creation_date = data[2]
+            loaded_tweet.user_id = data[3]
             return loaded_tweet
         else:
             return None
@@ -71,10 +72,10 @@ class Tweet(object):
             cursor.execute(sql_guery)
             self.__id = cursor.lastrowid
             return True
-        else:
-            sql = "UPDATE Tweets SET text='{}',creation_date='{}' WHERE tweet_id={};".format(self.text, self.creation_date,  self.__id)
-            print(sql)
-            cursor.execute(sql)
-            return True
+#         else:
+#             sql = "UPDATE Tweets SET text='{}',creation_date='{}' WHERE tweet_id={};".format(self.text, self.creation_date,  self.__id)
+#             print(sql)
+#             cursor.execute(sql)
+#             return True
         
     

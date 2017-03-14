@@ -168,12 +168,28 @@ def tweets_by_user_id(user_id):
     
 @app.route("/tweet_by_id/<id>", methods=['GET','POST'])
 def tweet_by_id(id): 
-    html = '<h3>Twitt id={}:</h3>'.format(id)
     
     if request.method == "GET":
         cnx = connect_db()  
-        tweet=Tweet.load_tweet_by_id(cnx.cursor(),id)
-        html +='{} {} {}'.format(tweet.text,datetime.date(tweet.creation_date),datetime.time(tweet.creation_date))   
+        tweet = Tweet.load_tweet_by_id(cnx.cursor(),id)
+        user = User.load_user_by_id(cnx.cursor(),tweet.user_id) 
+        html ='''
+                <table style="width:50%; margin-left:auto; margin-right:auto;">
+                  <tr>
+                     <th align="left"><h3>Id</h3></th>
+                     <th align="left"><h3>Text</h3></th>
+                     <th align="right"><h3>Author</h3></th>
+                     <th align="right"><h3>Creation Date</h3></th>
+                  </tr>
+                  <tr><td colspan="4"><hr></td></tr>
+                  <tr>
+                    <th align="left">{}</th>
+                    <th align="left">{}</th>
+                    <th align="right">{}</th>
+                    <th align="right">{} {}</th>
+                  </tr>
+                  <tr><td colspan="4"><hr></td></tr>
+                  '''.format(tweet.id,tweet.text,user.email, datetime.date(tweet.creation_date),datetime.time(tweet.creation_date)) 
     return html
 
 # set the secret key.  keep this really secret:
