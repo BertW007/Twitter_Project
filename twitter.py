@@ -30,45 +30,75 @@ def login():
         password = request.form['password']
         cnx = connect_db()  
         cursor = cnx.cursor()
-        sql = "SELECT hashed_password FROM Users WHERE email='{}'".format(username)
+        sql = "SELECT user_id,hashed_password FROM Users WHERE email='{}'".format(username)
         print(sql)
         result = cursor.execute(sql)
         data = cursor.fetchone()
         if data is None:
             error = 'Invalid username'
-        elif not check_password(password, data[0]):
+        elif not check_password(password, data[1]):
             error = 'Invalid password'
         else:
-#             session['logged_in'] = True
+            session['logged_in'] = True
+            session['user_id'] = data[0]
+            
 #             flash('You were logged in')
             return redirect(url_for('all_tweets'))
     return render_template('login.html', error=error)
 
 @app.route("/all_tweets", methods=['GET','POST'])
-def all_tweets(): 
-    html = '<h3>All Twits:</h3>'
-    
-    if request.method == "GET":
-        cnx = connect_db()  
-        tweets=Tweet.load_all_tweets(cnx.cursor())
-        html += '''
-                <table style="width:50%">
-                  <tr>
-                    <th align="left">Tweet Text</th>
-                    <th align="right">Date Added</th>
-                  </tr>'''   
-        for tweet in tweets:
-            html +='''
-                    <tr>
-                        <td>{}</td>
-                        <td align="right">{}</td>
-                      </tr>'''.format(tweet.text,datetime.date(tweet.creation_date))
+def all_tweets():
+    try:
+        if not session['logged_in']:
+           raise Exception  
+        if request.method == "GET":
+            cnx = connect_db()  
+            tweets=Tweet.load_all_tweets(cnx.cursor())
+            html = '''
+                    <table style="width:50%; margin-left:auto; margin-right:auto;">
+                      <tr>
+                      <td colspan = "2">
+                          <form method = 'POST'>
+                             <div class="form-group">
+                              <label for="new_tweet"><h3>New Tweet:</h3></label>
+                              <textarea class="form-control" rows="5" name="new_tweet" style="width:100%"></textarea>
+                              <input type="submit" value="Submit">
+                             </div>
+                          </form>
+                      </td>
+                      </tr>
+                      <tr>
+                        <th align="left"><h3>All Tweets:</h3></th>
+                      </tr>
+                      <tr><td colspan="2"><hr></td></tr>
+                      <tr>
+                        <th align="left">Tweet Text</th>
+                        <th align="right">Date Added</th>
+                      </tr>
+                      <tr><td colspan="2"><hr></td></tr>'''   
+            for tweet in tweets:
+                html +='''
+                        <tr>
+                            <td>{}</td>
+                            <td align="right">{}</td>
+                          </tr>'''.format(tweet.text,datetime.date(tweet.creation_date))
+                
+            html += '</table>'
+            return html
+      
+        elif request.method == "POST":
+            tweet = Tweet()
+            tweet.user_id = session['user_id']
+            tweet.text = request.form['new_tweet']
+            tweet.creation_date = datetime.now()
             
-        html += '</table>'
-        return html
-  
-    elif request.method == "POST":
-        return 'POST'
+            cnx = connect_db()
+            tweet.add_edit_tweet(cnx.cursor())
+            cnx.commit()
+            
+            return redirect(url_for('all_tweets'))
+    except:
+        return redirect(url_for('login'))
     
 @app.route("/tweets_by_user_id/<user_id>", methods=['GET','POST'])
 def tweets_by_user_id(user_id): 
@@ -104,6 +134,9 @@ def tweet_by_id(id):
         tweet=Tweet.load_tweet_by_id(cnx.cursor(),id)
         html +='{} {} {}'.format(tweet.text,datetime.date(tweet.creation_date),datetime.time(tweet.creation_date))   
     return html
+
+# set the secret key.  keep this really secret:
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
   
 
 
