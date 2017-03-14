@@ -56,7 +56,6 @@ def register():
         cnx = connect_db()  
         cursor = cnx.cursor()
         sql = "SELECT user_id,hashed_password FROM Users WHERE email='{}'".format(email)
-        print(sql)
         result = cursor.execute(sql)
         data = cursor.fetchone()
         if data is None:
@@ -80,6 +79,34 @@ def register():
             error = 'User with this email already exist'
             
     return render_template('register.html', error=error)
+
+@app.route('/edit', methods=['GET', 'POST'])
+def edit():
+    try:
+        if not session['logged_in']:
+           raise Exception
+        
+        cnx=connect_db()
+        user = User.load_user_by_id(cnx.cursor(),session['user_id'])
+        email = user.email     
+        error = None
+        if request.method == 'POST':
+            username = request.form['username']
+            
+            if request.form['password1'] == request.form['password2']:
+                password = request.form['password1']
+                
+                user.username = username
+                user.set_password(password,None)
+                user.save_to_db(cnx.cursor())
+                cnx.commit()
+                return redirect(url_for('all_tweets'))
+            else:
+                error='Different Passwords'
+                
+        return render_template('edit.html', error=error, email=email)
+    except:
+        return redirect(url_for('login'))
 
 @app.route("/all_tweets", methods=['GET','POST'])
 def all_tweets():
@@ -116,10 +143,10 @@ def all_tweets():
                 user = User.load_user_by_id(cnx.cursor(),tweet.user_id)
                 html +='''
                         <tr>
-                            <td>{}</td>
+                            <td><a href="http://127.0.0.1:5000/tweet_by_id/{}" style="color: black;text-decoration:none">{}</a></td>
+                            <td align="right"><a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a></td>
                             <td align="right">{}</td>
-                            <td align="right">{}</td>
-                          </tr>'''.format(tweet.text,user.email,datetime.date(tweet.creation_date))
+                          </tr>'''.format(tweet.id,tweet.text,user.id,user.email,datetime.date(tweet.creation_date))
                 
             html += '</table>'
             return html
@@ -139,109 +166,127 @@ def all_tweets():
         return redirect(url_for('login'))
     
 @app.route("/tweets_by_user_id/<user_id>", methods=['GET','POST'])
-def tweets_by_user_id(user_id):   
-    if request.method == "GET":
-        cnx = connect_db()  
-        tweets=Tweet.load_tweets_by_user_id(cnx.cursor(),user_id)
-        user = User.load_user_by_id(cnx.cursor(),user_id)
-        html = '''
-                <table style="width:50%; margin-left:auto; margin-right:auto;">
-                  <tr>
-                        <th align="left"><h3>All Tweets by {}:</h3></th>
-                      </tr>
-                      <tr><td colspan="2"><hr></td></tr>
+def tweets_by_user_id(user_id): 
+    try:
+        if not session['logged_in']:
+           raise Exception
+           
+        if request.method == "GET":
+            cnx = connect_db()  
+            tweets=Tweet.load_tweets_by_user_id(cnx.cursor(),user_id)
+            user = User.load_user_by_id(cnx.cursor(),user_id)
+            html = '''
+                    <table style="width:50%; margin-left:auto; margin-right:auto;">
                       <tr>
-                        <th align="left">Tweet Text</th>
-                        <th align="right">Date Added</th>
-                      </tr>
-                      <tr><td colspan="2"><hr></td></tr>'''.format(user.email)   
-        for tweet in tweets:
-            html +='''
-                    <tr>
-                        <td>{}</td>
-                        <td align="right">{}</td>
-                      </tr>'''.format(tweet.text,datetime.date(tweet.creation_date))
-             
-        html += '</table>'
-    return html
-  
-
-    
-@app.route("/tweet_by_id/<id>", methods=['GET','POST'])
-def tweet_by_id(id): 
-    
-    if request.method == "GET":
-        cnx = connect_db()  
-        tweet = Tweet.load_tweet_by_id(cnx.cursor(),id)
-        user = User.load_user_by_id(cnx.cursor(),tweet.user_id)
-        comments = Comment.load_comments_by_tweet_id(cnx.cursor(),id) 
-        html ='''
-                <table style="width:50%; margin-left:auto; margin-right:auto;">
-                  <tr>
-                     <th align="left"><h3>Id</h3></th>
-                     <th align="left"><h3>Text</h3></th>
-                     <th align="right"><h3>Author</h3></th>
-                     <th align="right"><h3>Creation Date</h3></th>
-                  </tr>
-                  <tr><td colspan="4"><hr></td></tr>
-                  <tr>
-                    <th align="left">{}</th>
-                    <th align="left">{}</th>
-                    <th align="right">{}</th>
-                    <th align="right">{} {}</th>
-                  </tr>
-                  <tr><td colspan="4"><hr></td></tr>
-                  '''.format(tweet.id,tweet.text,user.email, datetime.date(tweet.creation_date),datetime.time(tweet.creation_date)) 
-        html +='''
-                <table style="width:50%; margin-left:auto; margin-right:auto;">
-                          <tr>
-                             
+                            <th align="left"><h3>All Tweets by {}:</h3></th>
+                            <th align="right">
+                             <a href="edit" type="button" class="btn btn-default">Edit User</a>
+                            </th>
+                            <th align="right">
+                             <button type="button" class="btn btn-default">Send Message</button>
+                            </th>
                           </tr>
+                          <tr><td colspan="3"><hr></td></tr>
                           <tr>
-                             <th align="left"><h4>Comments</h4></th>
-                             <th align="right"><h4>Author</h4></th>
-                             <th align="right"><h4>Creation Date</h4></th>
+                            <th align="left">Tweet Text</th>
+                            <th align="right">Comments</th>
+                            <th align="right">Date Added</th>
                           </tr>
-                          <tr><td colspan="4"><hr></td></tr>
-                          
-                          
-        '''
-        for comment in comments:
-            user_com = User.load_user_by_id(cnx.cursor(),comment.user_id)
-            html +='''
-                    <tr>
-                        <td align="left">{}</td>
-                        <td align="right">{}</td>
-                        <td align="right">{}</td>
-                      </tr>
-                      '''.format(comment.text,user_com.email,datetime.date(comment.creation_date))
-            
-        
-        html += '''<tr><td colspan="4"><hr></td></tr>
-                <tr>
-                  <td colspan = "4">
-                      <form method = 'POST'>
-                         <div class="form-group">
-                          <label for="new_comment"><h3>New Comment:</h3></label>
-                          <textarea class="form-control" rows="5" name="new_comment" style="width:100%"></textarea>
-                          <input type="submit" value="Comment">
-                         </div>
-                      </form>
-                  </td>
-                </tr>
-        '''
+                          <tr><td colspan="3"><hr></td></tr>'''.format(user.email)   
+            for tweet in tweets:
+                comments = Comment.load_comments_by_tweet_id(cnx.cursor(),tweet.id)
+                html +='''
+                        <tr>
+                            <td><a href="http://127.0.0.1:5000/tweet_by_id/{}" style="color: black;text-decoration:none">{}</a></td>
+                            <td align="right">{}</td>
+                            <td align="right">{}</td>
+                          </tr>'''.format(tweet.id,tweet.text,len(comments),datetime.date(tweet.creation_date))
+                 
+            html += '</table>'
         return html
-    elif request.method == "POST":
-            comment = Comment()
-            comment.user_id = session['user_id']
-            comment.tweet_id = id
-            comment.text = request.form['new_comment']
-            comment.creation_date = datetime.now()
+    except:
+            return redirect(url_for('login'))
+   
+@app.route("/tweet_by_id/<id>", methods=['GET','POST'])
+def tweet_by_id(id):
+    try:
+        if not session['logged_in']:
+           raise Exception 
+    
+        if request.method == "GET":
+            cnx = connect_db()  
+            tweet = Tweet.load_tweet_by_id(cnx.cursor(),id)
+            user = User.load_user_by_id(cnx.cursor(),tweet.user_id)
+            comments = Comment.load_comments_by_tweet_id(cnx.cursor(),id) 
+            html ='''
+                    <table style="width:50%; margin-left:auto; margin-right:auto;">
+                      <tr>
+                         <th align="left"><h3>Id</h3></th>
+                         <th align="left"><h3>Text</h3></th>
+                         <th align="right"><h3>Author</h3></th>
+                         <th align="right"><h3>Creation Date</h3></th>
+                      </tr>
+                      <tr><td colspan="4"><hr></td></tr>
+                      <tr>
+                        <th align="left">{}</th>
+                        <th align="left">{}</th>
+                        <th align="right"><a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a></th>
+                        <th align="right">{} {}</th>
+                      </tr>
+                      <tr><td colspan="4"><hr></td></tr>
+                      '''.format(tweet.id,tweet.text,user.id,user.email, datetime.date(tweet.creation_date),datetime.time(tweet.creation_date)) 
+            html +='''
+                    <table style="width:50%; margin-left:auto; margin-right:auto;">
+                              <tr>
+                                 
+                              </tr>
+                              <tr>
+                                 <th align="left"><h4>Comments</h4></th>
+                                 <th align="right"><h4>Author</h4></th>
+                                 <th align="right"><h4>Creation Date</h4></th>
+                              </tr>
+                              <tr><td colspan="4"><hr></td></tr>
+                              
+                              
+            '''
+            for comment in comments:
+                user_com = User.load_user_by_id(cnx.cursor(),comment.user_id)
+                html +='''
+                        <tr>
+                            <td align="left">{}</td>
+                            <td align="right"><a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a></td>
+                            <td align="right">{}</td>
+                          </tr>
+                          '''.format(comment.text,user_com.id,user_com.email,datetime.date(comment.creation_date))
+                
             
-            cnx = connect_db()
-            comment.add_comment(cnx.cursor())
-            cnx.commit()
-            return redirect(('tweet_by_id/{}'.format(id)))
+            html += '''<tr><td colspan="4"><hr></td></tr>
+                    <tr>
+                      <td colspan = "4">
+                          <form method = 'POST'>
+                             <div class="form-group">
+                              <label for="new_comment"><h3>New Comment:</h3></label>
+                              <textarea class="form-control" rows="5" name="new_comment" style="width:100%"></textarea>
+                              <input type="submit" value="Comment">
+                             </div>
+                          </form>
+                      </td>
+                    </tr>
+            '''
+            return html
+        elif request.method == "POST":
+                comment = Comment()
+                comment.user_id = session['user_id']
+                comment.tweet_id = id
+                comment.text = request.form['new_comment']
+                comment.creation_date = datetime.now()
+                
+                cnx = connect_db()
+                comment.add_comment(cnx.cursor())
+                cnx.commit()
+                return redirect(('tweet_by_id/{}'.format(id)))
+    except:
+            return redirect(url_for('login'))
 
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
