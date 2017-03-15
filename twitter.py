@@ -195,7 +195,10 @@ def tweets_by_user_id(user_id):
                              
                             </th>
                             <th align="right">
-                             <a type="button" href="http://127.0.0.1:5000/new_message" class="btn btn-default">Send Message</a>
+                            <form action="/new_message" method="GET">
+                             <button type="submit" href="http://127.0.0.1:5000/new_message" class="btn btn-default">Send Message</button>
+                             <input type="hidden" name="recipient_id" value="{}">
+                            </form>
                             </th>
                           </tr>
                           <tr><td colspan="3"><hr></td></tr>
@@ -204,7 +207,7 @@ def tweets_by_user_id(user_id):
                             <th align="right">Comments</th>
                             <th align="right">Date Added</th>
                           </tr>
-                          <tr><td colspan="3"><hr></td></tr>'''.format(user.email)   
+                          <tr><td colspan="3"><hr></td></tr>'''.format(user.email,user_id)   
             for tweet in tweets:
                 comments = Comment.load_comments_by_tweet_id(cnx.cursor(),tweet.id)
                 html +='''
@@ -247,11 +250,7 @@ def tweet_by_id(id):
                       <tr>
                         <th align="left">{}</th>
                         <th align="left">{}</th>
-                        <th align="right">
-                        <form method = 'POST'>
-                        <a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a>
-                        </form>
-                        </th>
+                        <th align="right"><a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a> </th>
                         <th align="right">{} {}</th>
                       </tr>
                       <tr><td colspan="4"><hr></td></tr>
@@ -428,16 +427,25 @@ def message_by_id(message_id):
                          <td>{}</td>
                       </tr>
                       <tr><td colspan="4"><hr></td></tr>
-                      '''.format(sender.email,recipient.email,message.creation_date,message.title,message.text)
+                       <tr>
+                          <td>
+                            <form action="/new_message" method="GET">
+                             <button type="submit" href="http://127.0.0.1:5000/new_message" class="btn btn-default">Reply</button>
+                             <input type="hidden" name="recipient_id" value="{}">
+                            </form>
+                           </td>
+                        </tr>
+                       </table>
+                      '''.format(sender.email,recipient.email,message.creation_date,message.title,message.text,sender.id)
             return html 
 #     except:
 #             return redirect(url_for('login'))        
 
 @app.route("/new_message", methods=['GET','POST'])
 def new_messages():
-    try:
-        if not session['logged_in']:
-           raise Exception 
+#     try:
+#         if not session['logged_in']:
+#            raise Exception 
         if request.method == "GET":
             html = '''
             <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">All Tweets</a><br>
@@ -455,7 +463,7 @@ def new_messages():
                           <td colspan = "4">
                               <form method = 'POST'>
                                  <div class="form-group">
-                                  To:<input type="text" class="form-control" name="recipient_id" placeholder="Recipient ID" required="" autofocus="" ><br>
+                                  To:<input type="text" class="form-control" name="recipient_id" placeholder="Recipient ID" value ="{}" required="" autofocus="" ><br>
                                   Title:<input type="text" class="form-control" name="title" placeholder="Title" required="" autofocus="" ><br>
                                   <label for="new_message">Message:</label>
                                   <textarea class="form-control" rows="5" name="new_message" style="width:100%"></textarea>
@@ -465,7 +473,7 @@ def new_messages():
                           </td>
                         </tr>
                         </table>
-                '''
+                '''.format(request.args.get('recipient_id'))
             return html
         elif request.method == "POST":
             message = Message()
@@ -480,8 +488,8 @@ def new_messages():
             message.send_message(cnx.cursor())
             cnx.commit()
             return redirect(('messages'))
-    except:
-            return redirect(url_for('login'))
+#     except:
+#             return redirect(url_for('login'))
         
 
 
