@@ -6,6 +6,7 @@ from models.tweet import *
 from models.user import *
 from models.comment import *
 from models.crypto import *
+from models.message import *
 from datetime import datetime
 
 def connect_db():
@@ -117,6 +118,10 @@ def all_tweets():
             cnx = connect_db()  
             tweets=Tweet.load_all_tweets(cnx.cursor())
             html = '''
+            <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">All Tweets</a><br>
+            <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">Messages</a>
+            
+            
                     <table style="width:50%; margin-left:auto; margin-right:auto;">
                       <tr>
                       <td colspan = "3">
@@ -176,11 +181,15 @@ def tweets_by_user_id(user_id):
             tweets=Tweet.load_tweets_by_user_id(cnx.cursor(),user_id)
             user = User.load_user_by_id(cnx.cursor(),user_id)
             html = '''
+                    <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">All Tweets</a><br>
+                    <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">Messages</a>
+            
+            
                     <table style="width:50%; margin-left:auto; margin-right:auto;">
                       <tr>
                             <th align="left"><h3>All Tweets by {}:</h3></th>
                             <th align="right">
-                             <a href="edit" type="button" class="btn btn-default">Edit User</a>
+                             <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">Edit User</a>
                             </th>
                             <th align="right">
                              <button type="button" class="btn btn-default">Send Message</button>
@@ -219,6 +228,9 @@ def tweet_by_id(id):
             user = User.load_user_by_id(cnx.cursor(),tweet.user_id)
             comments = Comment.load_comments_by_tweet_id(cnx.cursor(),id) 
             html ='''
+                    <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">All Tweets</a><br>
+                    <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">Messages</a>
+            
                     <table style="width:50%; margin-left:auto; margin-right:auto;">
                       <tr>
                          <th align="left"><h3>Id</h3></th>
@@ -287,6 +299,102 @@ def tweet_by_id(id):
                 return redirect(('tweet_by_id/{}'.format(id)))
     except:
             return redirect(url_for('login'))
+        
+@app.route("/messages", methods=['GET','POST'])
+def messages():
+#     try:
+#         if not session['logged_in']:
+#            raise Exception 
+    
+        if request.method == "GET":
+            cnx = connect_db()  
+            received = Message.load_messages_by_recipient_id(cnx.cursor(),session['user_id'])
+            sent = Message.load_messages_by_sender_id(cnx.cursor(),session['user_id'])
+            html ='''
+                    <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">All Tweets</a><br>
+                    <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">Messages</a>
+            
+                    <table style="width:50%; margin-left:auto; margin-right:auto;">
+                      <tr>
+                        <th align="left"><h3>Received:</h3></th>
+                      <tr>
+                      <tr>
+                         <th align="left"><h3>From</h3></th>
+                         <th align="left"><h3>Text</h3></th>
+                         <th align="right"><h3>Status</h3></th>
+                         <th align="right"><h3>Date</h3></th>
+                      </tr>
+                      <tr><td colspan="4"><hr></td></tr>
+                      '''
+           
+            for message in received:
+                user = User.load_user_by_id(cnx.cursor(),message.sender_id)
+                html +='''
+                        <tr>
+                        <td align="left">{}</td>
+                        <td align="left">{}</td>
+                        <td align="right">{}</td>
+                        <td align="right">{}</td>
+                      </tr>
+                          '''.format(user.email,message.text, message.status,datetime.date(message.creation_date))
+            html +='''
+                    
+                    <table style="width:50%; margin-left:auto; margin-right:auto;">
+                      <tr>
+                        <th align="left"><h3>Sent:</h3></th>
+                      <tr>
+                      <tr>
+                         <th align="left"><h3>To</h3></th>
+                         <th align="left"><h3>Text</h3></th>
+                         <th align="right"><h3>Status</h3></th>
+                         <th align="right"><h3>Date</h3></th>
+                      </tr>
+                      <tr><td colspan="4"><hr></td></tr>
+                      '''
+           
+            for message in sent:
+                user = User.load_user_by_id(cnx.cursor(),message.recipient_id)
+                html +='''
+                        <tr>
+                        <td align="left">{}</td>
+                        <td align="left">{}</td>
+                        <td align="right">{}</td>
+                        <td align="right">{}</td>
+                      </tr>
+                          '''.format(user.email,message.text, message.status,datetime.date(message.creation_date))              
+                
+            
+            html += '''<tr><td colspan="4"><hr></td></tr>
+                    <tr>
+                      <td colspan = "4">
+                          <form method = 'POST'>
+                             <div class="form-group">
+                              <input type="text" class="form-control" name="recipient_id" placeholder="Recipient ID" required="" autofocus="" >
+                              <label for="new_message"><h3>New Message:</h3></label>
+                              <textarea class="form-control" rows="5" name="new_message" style="width:100%"></textarea>
+                              <input type="submit" value="Send">
+                             </div>
+                          </form>
+                      </td>
+                    </tr>
+            '''
+            return html
+        elif request.method == "POST":
+                message = Message()
+                message.sender_id = session['user_id']
+                message.recipient_id = int(request.form['recipient_id'])
+                message.text = request.form['new_message']
+                message.status = 0
+                message.creation_date = datetime.now()
+                
+                cnx = connect_db()
+                message.send_message(cnx.cursor())
+                cnx.commit()
+                return redirect(('messages'))
+#     except:
+#             return redirect(url_for('login'))
+        
+
 
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
