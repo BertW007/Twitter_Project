@@ -4,6 +4,7 @@ class Message(object):
     __id = None
     sender_id = None
     recipient_id = None
+    title = None
     text = None
     status = None
     creation_date = None
@@ -12,6 +13,7 @@ class Message(object):
         self.__id = -1
         sender_id = 0
         recipient_id = 0
+        title = ''
         text = ''
         status = False
         creation_date = datetime.now()
@@ -38,8 +40,9 @@ class Message(object):
     
     @staticmethod
     def load_messages_by_sender_id(cursor,sender_id):
-        sql = """SELECT id,recipient_id,text,status,creation_date
-                FROM Messages WHERE id={}""".format(sender_id)
+        sql = """SELECT id,recipient_id,title,text,status,creation_date
+                FROM Messages WHERE sender_id={}""".format(sender_id)
+        print(sql)
         result = cursor.execute(sql)
         data = cursor.fetchall()
         ret = []
@@ -48,16 +51,18 @@ class Message(object):
             loaded_message = Message()
             loaded_message.__id = row[0]
             loaded_message.recipient_id = row[1]
-            loaded_message.text = row[2]
-            loaded_message.status = row[3]
-            loaded_message.creation_date = row[4]
+            loaded_message.title = row[2]
+            loaded_message.text = row[3]
+            loaded_message.status = row[4]
+            loaded_message.creation_date = row[5]
             ret.append(loaded_message)
         return ret
     
     @staticmethod
     def load_messages_by_recipient_id(cursor,recipient_id):
-        sql = """SELECT id,sender_id,text,status,creation_date
-                FROM Messages WHERE id={}""".format(recipient_id)
+        sql = """SELECT id,sender_id,title,text,status,creation_date
+                FROM Messages WHERE recipient_id={}""".format(recipient_id)
+        print(sql)
         result = cursor.execute(sql)
         data = cursor.fetchall()
         ret = []
@@ -66,11 +71,32 @@ class Message(object):
             loaded_message = Message()
             loaded_message.__id = row[0]
             loaded_message.sender_id = row[1]
-            loaded_message.text = row[2]
-            loaded_message.status = row[3]
-            loaded_message.creation_date = row[4]
+            loaded_message.title = row[2]
+            loaded_message.text = row[3]
+            loaded_message.status = row[4]
+            loaded_message.creation_date = row[5]
             ret.append(loaded_message)
         return ret
+    
+    @staticmethod
+    def load_message_by_id(cursor,message_id):
+        sql = """SELECT sender_id,recipient_id,title,text,status,creation_date
+                FROM Messages WHERE id={}""".format(message_id)
+        print(sql)
+        result = cursor.execute(sql)
+        data = cursor.fetchone()
+         
+        if data is not None:
+            loaded_message = Message()
+            loaded_message.recipient_id = data[0]
+            loaded_message.sender_id = data[1]
+            loaded_message.title = data[2]
+            loaded_message.text = data[3]
+            loaded_message.status = data[4]
+            loaded_message.creation_date = data[5]
+            return loaded_message
+        else:
+            return None
     
     
         
@@ -96,9 +122,9 @@ class Message(object):
         
     def send_message(self, cursor):
         if self.__id == -1:
-            sql_guery = """INSERT INTO Messages(sender_id,recipient_id,text,status,creation_date) 
-                        VALUES('{}','{}','{}','{}','{}');
-                        """.format(self.sender_id,self.recipient_id,self.text,self.status,self.creation_date)
+            sql_guery = """INSERT INTO Messages(sender_id,recipient_id,title,text,status,creation_date) 
+                        VALUES('{}','{}','{}','{}','{}','{}');
+                        """.format(self.sender_id,self.recipient_id,self.title,self.text,self.status,self.creation_date)
                 
             cursor.execute(sql_guery)
             self.__id = cursor.lastrowid
