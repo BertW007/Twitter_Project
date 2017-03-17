@@ -43,7 +43,6 @@ def login():
         else:
             session['logged_in'] = True
             session['user_id'] = data[0]
-#             flash('You were logged in')
             return redirect(url_for('all_tweets'))
     return render_template('login.html', error=error)
 
@@ -152,9 +151,10 @@ def all_tweets():
                             <td><a href="http://127.0.0.1:5000/tweet_by_id/{}" style="color: black;text-decoration:none">{}</a></td>
                             <td align="right"><a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a></td>
                             <td align="right">{}</td>
-                          </tr>'''.format(tweet.id,tweet.text,user.id,user.email,datetime.date(tweet.creation_date))
-                
-            html += '</table>'
+                        </tr>
+                    </table>
+                    '''.format(tweet.id,tweet.text,user.id,user.email,datetime.date(tweet.creation_date))  
+            
             return html
       
         elif request.method == "POST":
@@ -187,7 +187,6 @@ def tweets_by_user_id(user_id):
                     <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">New Message</a><br>
                     <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">Edit User</a>
             
-            
                     <table style="width:50%; margin-left:auto; margin-right:auto;">
                       <tr>
                             <th align="left"><h3>All Tweets by {}:</h3></th>
@@ -215,9 +214,10 @@ def tweets_by_user_id(user_id):
                             <td><a href="http://127.0.0.1:5000/tweet_by_id/{}" style="color: black;text-decoration:none">{}</a></td>
                             <td align="right">{}</td>
                             <td align="right">{}</td>
-                          </tr>'''.format(tweet.id,tweet.text,len(comments),datetime.date(tweet.creation_date))
-                 
-            html += '</table>'
+                        </tr>
+                    </table>
+                    '''.format(tweet.id,tweet.text,len(comments),datetime.date(tweet.creation_date))
+        
         return html
     except:
             return redirect(url_for('login'))
@@ -265,10 +265,8 @@ def tweet_by_id(id):
                                  <th align="right"><h4>Author</h4></th>
                                  <th align="right"><h4>Creation Date</h4></th>
                               </tr>
-                              <tr><td colspan="4"><hr></td></tr>
-                              
-                              
-            '''
+                              <tr><td colspan="4"><hr></td></tr>                 
+                    '''
             for comment in comments:
                 user_com = User.load_user_by_id(cnx.cursor(),comment.user_id)
                 html +='''
@@ -279,7 +277,6 @@ def tweet_by_id(id):
                           </tr>
                           '''.format(comment.text,user_com.id,user_com.email,datetime.date(comment.creation_date))
                 
-            
             html += '''<tr><td colspan="4"><hr></td></tr>
                     <tr>
                       <td colspan = "4">
@@ -337,7 +334,7 @@ def messages():
                          <th align="right"><h3>Date</h3></th>
                       </tr>
                       <tr><td colspan="4"><hr></td></tr>
-                      '''
+                '''
            
             for message in received:
                 if message.status == 0:
@@ -346,13 +343,13 @@ def messages():
                     color = 'black'
                 user = User.load_user_by_id(cnx.cursor(),message.sender_id)
                 html +='''
-                        <tr>
+                    <tr>
                         <td align="left"><a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a></td>
                         <td align="left"><a href="http://127.0.0.1:5000/message_by_id/{}" style="color: {};text-decoration:none">{}</a></td>
                         <td align="right">{}</td>
                         <td align="right">{}</td>
-                      </tr>
-                          '''.format(user.id,user.email,message.id,color,message.title, message.status,datetime.date(message.creation_date))
+                    </tr>
+                        '''.format(user.id,user.email,message.id,color,message.title, message.status,datetime.date(message.creation_date))
             html +='''
                     
                     <table style="width:50%; margin-left:auto; margin-right:auto;">
@@ -366,7 +363,7 @@ def messages():
                          <th align="right"><h3>Date</h3></th>
                       </tr>
                       <tr><td colspan="4"><hr></td></tr>
-                      '''
+                    '''
            
             for message in sent:
                 if message.status == 0:
@@ -382,7 +379,6 @@ def messages():
                         <td align="right">{}</td>
                       </tr>
                           '''.format(user.id,user.email,message.id,color,message.title, message.status,datetime.date(message.creation_date))              
-                
             return html
             
     except:
@@ -443,85 +439,52 @@ def message_by_id(message_id):
                             </form>
                            </td>
                         </tr>
-                       </table>
-                      '''.format(sender.email,recipient.email,message.creation_date,message.title,message.text,sender.email)
+                    </table>
+                    '''.format(sender.email,recipient.email,message.creation_date,message.title,message.text,sender.email)
             return html 
     except:
             return redirect(url_for('login'))        
 
 @app.route("/new_message", methods=['GET','POST'])
 def new_messages():
-#     try:
-#         if not session['logged_in']:
-#            raise Exception 
-#         if request.method == "GET":
-#             html = '''
-#             <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">All Tweets</a><br>
-#             <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">Messages</a><br>
-#             <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">New Message</a><br>
-#             <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">Edit User</a>            
-#             
-#             <table style="width:50%; margin-left:auto; margin-right:auto;">
-#                       <tr>
-#                         <th align="left"><h3>New Message:</h3></th>
-#                       <tr>
-#                      
-#                       <tr><td colspan="4"><hr></td></tr>
-#                         <tr>
-#                           <td colspan = "4">
-#                               <form method = 'POST'>
-#                                  <div class="form-group">
-#                                   To:<input type="text" class="form-control" name="recipient_email" placeholder="Recipient Email" value ="{}" required="" autofocus="" ><br>
-#                                   Title:<input type="text" class="form-control" name="title" placeholder="Title" required="" autofocus="" ><br>
-#                                   <label for="new_message">Message:</label>
-#                                   <textarea class="form-control" rows="5" name="new_message" style="width:100%"></textarea>
-#                                   <input type="submit" value="Send">
-#                                  </div>
-#                               </form>
-#                           </td>
-#                         </tr>
-#                         </table>
-#                 '''.format(request.args.get('recipient_email'))
-#             return html
-    error = None
-    mail = request.args.get('recipient_email')
-    if request.method == "POST":
-        mail = request.form['recipient_email']
-        cnx = connect_db()
-        cursor = cnx.cursor()
-        sql = "SELECT user_id FROM Users WHERE email='{}';".format(mail)
-        cursor.execute(sql)
-        recipient_id = cursor.fetchone()
-        
-        if recipient_id is None:
-            error = 'Specified recipient does not exist...'
-#             return redirect(('new_message'))
-        elif recipient_id[0] == session['user_id']:
-            error = 'You cannot send message to Yourself...'
-#             return redirect(('new_message'))
-        else:    
-            message = Message()
-            message.sender_id = session['user_id']
-            message.recipient_id = recipient_id[0]
-            message.title = request.form['title']
-            message.text = request.form['new_message']
-            message.status = 0
-            message.creation_date = datetime.now()
-            
-            
-            message.send_message(cnx.cursor())
-            cnx.commit()
-            return redirect(('messages'))
-    return render_template('message.html', error=error,mail=mail)
-#     except:
-#             return redirect(url_for('login'))
-        
+    try:
+        if not session['logged_in']:
+           raise Exception 
 
-
+        error = None
+        mail = request.args.get('recipient_email')
+        if request.method == "POST":
+            mail = request.form['recipient_email']
+            cnx = connect_db()
+            cursor = cnx.cursor()
+            sql = "SELECT user_id FROM Users WHERE email='{}';".format(mail)
+            cursor.execute(sql)
+            recipient_id = cursor.fetchone()
+            
+            if recipient_id is None:
+                error = 'Specified recipient does not exist...'
+            elif recipient_id[0] == session['user_id']:
+                error = 'You cannot send message to Yourself...'
+            else:    
+                message = Message()
+                message.sender_id = session['user_id']
+                message.recipient_id = recipient_id[0]
+                message.title = request.form['title']
+                message.text = request.form['new_message']
+                message.status = 0
+                message.creation_date = datetime.now()
+                
+                message.send_message(cnx.cursor())
+                cnx.commit()
+                return redirect(('messages'))
+        return render_template('message.html', error=error,mail=mail)
+    except:
+            return redirect(url_for('login'))
+ 
+        
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
   
-
 
 if __name__ == "__main__":
     app.run()
