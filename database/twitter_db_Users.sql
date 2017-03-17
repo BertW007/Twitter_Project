@@ -1,0 +1,54 @@
+-- MySQL dump 10.13  Distrib 5.7.17, for Linux (x86_64)
+--
+-- Host: 127.0.0.1    Database: twitter_db
+-- ------------------------------------------------------
+-- Server version	5.7.17-0ubuntu0.16.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `Users`
+--
+
+DROP TABLE IF EXISTS `Users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Users` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `hashed_password` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Users`
+--
+
+LOCK TABLES `Users` WRITE;
+/*!40000 ALTER TABLE `Users` DISABLE KEYS */;
+INSERT INTO `Users` VALUES (2,'frodo','QGdpegpAUoVoacWc7e78e2ab919b30a3738030330feae9ce5f2a4652d57d6c352ef28c5b0705e54d','fb@ring.com'),(4,'bilbo','QAUAvHKcFSj7wzByb978d62d0a2c669bf1d552a6e45c64cb632224064cc6330af67a225bb3515117','bb@ring.com'),(5,'gollum','aOsFvei3tBiIXeIz0ca28b96ad6c45254d68f9355d023b4cde3de899f1452ac8299bd816b001d9d4','smeagol@fish.com'),(6,'sam','gm05GyiZ7BtxRFdU54f6c4bb5a70a40f36d213e07ee68caf99311c485805b0a85a796fd96850cee3','sam@gamgee.com'),(7,'Jarek','5bo5sMp9PGHEMTVg5910440de0510e69262a48577d3a5da3c1a153f57382db5cc497164669da2510','jarek@pis.pl'),(8,'hej','7bImBwQGE4j2pNFQ9f801996cf932bd147754762492781904aca377bcb749ef3448223bd61df035f','hej@hej.pl'),(9,'ble','l2vspg2eMpORhnFVe61495acf62cd1afe4a0a2ee5181e3fd5392e3889f142ec67f011d3971233554','ble@ble.pl');
+/*!40000 ALTER TABLE `Users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-03-15 17:18:11
