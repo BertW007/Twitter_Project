@@ -9,6 +9,7 @@ password = 'coderslab'
 host = 'localhost'
 database = 'twitter_db'
 
+
 def connect_db(user,password,host,database):
     try:
         cnx = connect(user=user, password=password, host=host, database=database)
@@ -16,6 +17,7 @@ def connect_db(user,password,host,database):
         print("Connected...")
     except ProgrammingError:
         print("Not connected...") 
+
 
 def disconnect():
     cnx.commit()           
@@ -44,7 +46,8 @@ def testCreateUser():
          
     except ProgrammingError:
             print("Not connected...")
-    
+
+
 def testReadUser():
     
     try:
@@ -64,7 +67,8 @@ def testReadUser():
          
     except TypeError:
             print("Not connected...")
-            
+
+
 def testAllUsers():
     
     try:
@@ -85,7 +89,8 @@ def testAllUsers():
          
     except TypeError:
             print("Not connected...")
-            
+
+
 def testModifyUser():
     
     try:
@@ -110,7 +115,8 @@ def testModifyUser():
          
     except TypeError:
             print("Not connected...")
-            
+
+
 def testDeleteUser():
     
     try:
@@ -131,7 +137,8 @@ def testDeleteUser():
          
     except TypeError:
             print("Not connected...")
-            
+
+
 def testCreateTweet():
     new_tweet = Tweet()
     new_tweet.text = 'gollsdfsdfsdfsfdsdfum'
