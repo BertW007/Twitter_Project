@@ -1,7 +1,6 @@
 from .crypto import password_hash
 
 
-
 class User(object):
    
     __id = None

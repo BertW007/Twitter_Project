@@ -56,7 +56,7 @@ def testReadUser():
         cursor = cnx.cursor()  
         try:      
             read_user = User.load_user_by_id(cursor,5)
-            print(read_user.username, '-' , read_user.email)
+            print(read_user.username, '-', read_user.email)
         except AttributeError:
             print('There is no such record in database...')
             

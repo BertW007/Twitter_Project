@@ -145,7 +145,7 @@ def all_tweets():
                       </tr>
                       <tr><td colspan="3"><hr></td></tr>'''   
             for tweet in tweets:
-                user = User.load_user_by_id(cnx.cursor(),tweet.user_id)
+                user = User.load_user_by_id(cnx.cursor(), tweet.user_id)
                 html +='''
                         <tr>
                             <td><a href="http://127.0.0.1:5000/tweet_by_id/{}" style="color: black;text-decoration:none">{}</a></td>
