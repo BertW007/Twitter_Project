@@ -78,4 +78,3 @@ def check_password(pass_to_check, hashed):
         return True
     else:
         return False
-    

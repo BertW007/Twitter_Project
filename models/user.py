@@ -1,4 +1,4 @@
-from models.crypto import *
+from .crypto import password_hash
 
 
 
@@ -24,7 +24,7 @@ class User(object):
         return self.__hashed_password
     
     def set_password(self, password,salt):
-        self.__hashed_password =password_hash(password, salt)
+        self.__hashed_password = password_hash(password, salt)
         
     def save_to_db(self, cursor):
         if self.__id == -1:
@@ -78,6 +78,3 @@ class User(object):
         cursor.execute(sql)
         self.__id = -1
         return True
-        
-                            
-                
