@@ -71,8 +71,7 @@ class Comment(object):
             loaded_comment.creation_date = row[3]
             ret.append(loaded_comment)
         return ret
-        
-        
+
     def add_comment(self, cursor):
         if self.__id == -1:
             sql_guery = """INSERT INTO Comments(user_id,tweet_id,text,creation_date) 
