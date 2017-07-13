@@ -313,14 +313,18 @@ def tweet_by_id(id):
                               <tr><td colspan="4"><hr></td></tr>                 
                     '''
             for comment in comments:
-                user_com = User.load_user_by_id(cnx.cursor(),comment.user_id)
+                user_com = User.load_user_by_id(cnx.cursor(), comment.user_id)
                 html += '''
                         <tr>
                             <td align="left">{}</td>
-                            <td align="right"><a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a></td>
+                            <td align="right">
+                                <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
+                                style="color: black;text-decoration:none">
+                                {}</a>
+                            </td>
                             <td align="right">{}</td>
                           </tr>
-                          '''.format(comment.text,user_com.id,user_com.email,datetime.date(comment.creation_date))
+                          '''.format(comment.text, user_com.id, user_com.email, datetime.date(comment.creation_date))
                 
             html += '''<tr><td colspan="4"><hr></td></tr>
                     <tr>
@@ -347,39 +351,46 @@ def tweet_by_id(id):
                 comment.add_comment(cnx.cursor())
                 cnx.commit()
                 return redirect(('tweet_by_id/{}'.format(id)))
-    except:
+    except Exception:
             return redirect(url_for('login'))
 
 
-@app.route("/messages", methods=['GET','POST'])
+@app.route("/messages", methods=['GET', 'POST'])
 def messages():
     try:
         if not session['logged_in']:
-           raise Exception 
+            raise Exception
     
         if request.method == "GET":
             cnx = connect_db()  
-            received = Message.load_messages_by_recipient_id(cnx.cursor(),session['user_id'])
+            received = Message.load_messages_by_recipient_id(cnx.cursor(), session['user_id'])
             print(received)
-            sent = Message.load_messages_by_sender_id(cnx.cursor(),session['user_id'])
+            sent = Message.load_messages_by_sender_id(cnx.cursor(), session['user_id'])
             print(sent)
-            html ='''
-                    <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">All Tweets</a><br>
-                    <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">Messages</a><br>
-                    <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">New Message</a><br>
-                    <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">Edit User</a> 
-            
-                    <table style="width:50%; margin-left:auto; margin-right:auto;">
-                      <tr>
-                        <th align="left"><h3>Received:</h3></th>
-                      <tr>
-                      <tr>
-                         <th align="left"><h3>From</h3></th>
-                         <th align="left"><h3>Title</h3></th>
-                         <th align="right"><h3>Status</h3></th>
-                         <th align="right"><h3>Date</h3></th>
-                      </tr>
-                      <tr><td colspan="4"><hr></td></tr>
+            html = '''
+                <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
+                    All Tweets
+                </a><br>
+                <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">
+                    Messages
+                </a><br>
+                <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">
+                    New Message
+                </a><br>
+                <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">
+                Edit User</a>
+
+                <table style="width:50%; margin-left:auto; margin-right:auto;">
+                  <tr>
+                    <th align="left"><h3>Received:</h3></th>
+                  <tr>
+                  <tr>
+                     <th align="left"><h3>From</h3></th>
+                     <th align="left"><h3>Title</h3></th>
+                     <th align="right"><h3>Status</h3></th>
+                     <th align="right"><h3>Date</h3></th>
+                  </tr>
+                  <tr><td colspan="4"><hr></td></tr>
                 '''
            
             for message in received:
@@ -387,16 +398,23 @@ def messages():
                     color = 'red'
                 else:
                     color = 'black'
-                user = User.load_user_by_id(cnx.cursor(),message.sender_id)
-                html +='''
+                user = User.load_user_by_id(cnx.cursor(), message.sender_id)
+                html += '''
                     <tr>
-                        <td align="left"><a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a></td>
-                        <td align="left"><a href="http://127.0.0.1:5000/message_by_id/{}" style="color: {};text-decoration:none">{}</a></td>
+                        <td align="left">
+                            <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
+                            style="color: black;text-decoration:none">{}</a>
+                        </td>
+                        <td align="left">
+                            <a href="http://127.0.0.1:5000/message_by_id/{}"
+                            style="color: {};text-decoration:none">{}</a>
+                        </td>
                         <td align="right">{}</td>
                         <td align="right">{}</td>
                     </tr>
-                        '''.format(user.id,user.email,message.id,color,message.title, message.status,datetime.date(message.creation_date))
-            html +='''
+                        '''.format(user.id, user.email, message.id, color, message.title, message.status,
+                                   datetime.date(message.creation_date))
+            html += '''
                     
                     <table style="width:50%; margin-left:auto; margin-right:auto;">
                       <tr>
@@ -416,86 +434,106 @@ def messages():
                     color = 'red'
                 else:
                     color = 'black'
-                user = User.load_user_by_id(cnx.cursor(),message.recipient_id)
-                html +='''
+                user = User.load_user_by_id(cnx.cursor(), message.recipient_id)
+                html += '''
                         <tr>
-                        <td align="left"><a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a></td>
-                        <td align="left"><a href="http://127.0.0.1:5000/message_by_id/{}" style="color: {};text-decoration:none">{}</a></td>
+                        <td align="left">
+                            <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
+                            style="color: black;text-decoration:none">{}</a>
+                        </td>
+                        <td align="left">
+                            <a href="http://127.0.0.1:5000/message_by_id/{}"
+                            style="color: {};text-decoration:none">{}</a>
+                        </td>
                         <td align="right">{}</td>
                         <td align="right">{}</td>
                       </tr>
-                          '''.format(user.id,user.email,message.id,color,message.title, message.status,datetime.date(message.creation_date))              
+                          '''.format(user.id, user.email, message.id, color, message.title, message.status,
+                                     datetime.date(message.creation_date))
             return html
             
-    except:
+    except Exception:
             return redirect(url_for('login'))
-        
-@app.route("/message_by_id/<message_id>", methods=['GET','POST'])
+
+
+@app.route("/message_by_id/<message_id>", methods=['GET', 'POST'])
 def message_by_id(message_id):
     try:
         if not session['logged_in']:
-           raise Exception 
+            raise Exception
     
         if request.method == "GET":
             cnx = connect_db()
             cursor = cnx.cursor()  
-            message = Message.load_message_by_id(cnx.cursor(),message_id)
-            sender = User.load_user_by_id(cnx.cursor(),message.sender_id)
-            recipient = User.load_user_by_id(cnx.cursor(),message.recipient_id)
+            message = Message.load_message_by_id(cnx.cursor(), message_id)
+            sender = User.load_user_by_id(cnx.cursor(), message.sender_id)
+            recipient = User.load_user_by_id(cnx.cursor(), message.recipient_id)
             sql = "UPDATE Messages SET status= 1 WHERE id={};".format(message_id)
             print(sql)
             cursor.execute(sql)
             cnx.commit()
             
-            html ='''
-                    <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">All Tweets</a><br>
-                    <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">Messages</a><br>
-                    <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">New Message</a><br>
-                    <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">Edit User</a>
-                    
-                    <table style="width:50%; margin-left:auto; margin-right:auto;">
-                      <tr>
-                         <th align="left"><h3>From:</h3></th>
-                         <td>{}</td>
-                      </tr>
-                      <tr>
-                         <th align="left"><h3>To:</h3></th>
-                         <td>{}</td>
-                      </tr>
-                      <tr>
-                         <th align="left"><h3>Sent on:</h3></th>
-                         <td>{}</td>
-                     </tr>
-                     <tr><td colspan="4"><hr></td></tr>
-                      <tr>
-                         <th align="left"><h3>Title:</h3></th>
-                         <td>{}</td>
-                      </tr>
-                      <tr><td colspan="4"><hr></td></tr>
-                      <tr>
-                         <th align="left"><h3>Message:</h3></th>
-                         <td>{}</td>
-                      </tr>
-                      <tr><td colspan="4"><hr></td></tr>
-                       <tr>
-                          <td>
-                            <form action="/new_message" method="GET">
-                             <button type="submit" href="http://127.0.0.1:5000/new_message" class="btn btn-default">Reply</button>
-                             <input type="hidden" name="recipient_email" value="{}">
-                            </form>
-                           </td>
-                        </tr>
-                    </table>
-                    '''.format(sender.email,recipient.email,message.creation_date,message.title,message.text,sender.email)
+            html = '''
+                <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
+                    All Tweets
+                </a><br>
+                <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">
+                    Messages
+                </a><br>
+                <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">
+                    New Message
+                </a><br>
+                <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">
+                    Edit User
+                </a>
+
+                <table style="width:50%; margin-left:auto; margin-right:auto;">
+                  <tr>
+                     <th align="left"><h3>From:</h3></th>
+                     <td>{}</td>
+                  </tr>
+                  <tr>
+                     <th align="left"><h3>To:</h3></th>
+                     <td>{}</td>
+                  </tr>
+                  <tr>
+                     <th align="left"><h3>Sent on:</h3></th>
+                     <td>{}</td>
+                 </tr>
+                 <tr><td colspan="4"><hr></td></tr>
+                  <tr>
+                     <th align="left"><h3>Title:</h3></th>
+                     <td>{}</td>
+                  </tr>
+                  <tr><td colspan="4"><hr></td></tr>
+                  <tr>
+                     <th align="left"><h3>Message:</h3></th>
+                     <td>{}</td>
+                  </tr>
+                  <tr><td colspan="4"><hr></td></tr>
+                   <tr>
+                      <td>
+                        <form action="/new_message" method="GET">
+                         <button type="submit" href="http://127.0.0.1:5000/new_message" class="btn btn-default">
+                            Reply
+                         </button>
+                         <input type="hidden" name="recipient_email" value="{}">
+                        </form>
+                       </td>
+                    </tr>
+                </table>
+                    '''.format(sender.email, recipient.email, message.creation_date,
+                               message.title, message.text, sender.email)
             return html 
-    except:
+    except Exception:
             return redirect(url_for('login'))        
 
-@app.route("/new_message", methods=['GET','POST'])
+
+@app.route("/new_message", methods=['GET', 'POST'])
 def new_messages():
     try:
         if not session['logged_in']:
-           raise Exception 
+            raise Exception
 
         error = None
         mail = request.args.get('recipient_email')
@@ -523,7 +561,7 @@ def new_messages():
                 message.send_message(cnx.cursor())
                 cnx.commit()
                 return redirect('messages')
-        return render_template('message.html', error=error,mail=mail)
+        return render_template('message.html', error=error, mail=mail)
     except:
             return redirect(url_for('login'))
  
@@ -534,4 +572,3 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 if __name__ == "__main__":
     app.run()
-    
