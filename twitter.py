@@ -152,9 +152,9 @@ def all_tweets():
                             <td align="right"><a href="http://127.0.0.1:5000/tweets_by_user_id/{}" style="color: black;text-decoration:none">{}</a></td>
                             <td align="right">{}</td>
                         </tr>
-                    </table>
-                    '''.format(tweet.id,tweet.text,user.id,user.email,datetime.date(tweet.creation_date))  
-            
+                    '''.format(tweet.id,tweet.text,user.id,user.email,datetime.date(tweet.creation_date))
+            html += '''</table>'''
+
             return html
       
         elif request.method == "POST":
