@@ -173,7 +173,7 @@ def all_tweets():
                     '''.format(tweet.id, tweet.text, user.id, user.email, datetime.date(tweet.creation_date))
             html += '''</table>'''
 
-            return render_template('all_tweets.html', tweets=tweets)
+            return render_template('all_tweets.html')
       
         elif request.method == "POST":
             tweet = Tweet()
