@@ -24,7 +24,7 @@ def disconnect():
     cursor.close()
     cnx.close()
     print('Disconnected...')
-    
+
 
 def testCreateUser():
     new_user = User()
@@ -49,7 +49,7 @@ def testCreateUser():
 
 
 def testReadUser():
-    
+
     try:
         cnx = connect(user=user, password=password, host=host, database=database)
         print("Connected...")
@@ -70,7 +70,7 @@ def testReadUser():
 
 
 def testAllUsers():
-    
+
     try:
         cnx = connect(user=user, password=password, host=host, database=database)
         print("Connected...")
@@ -92,7 +92,7 @@ def testAllUsers():
 
 
 def testModifyUser():
-    
+
     try:
         cnx = connect(user=user, password=password, host=host, database=database)
         print("Connected...")
@@ -160,8 +160,6 @@ def testCreateTweet():
     except ProgrammingError:
             print("Not connected...")
     
-    
-
 
 if __name__ == "__main__":
     testCreateUser()

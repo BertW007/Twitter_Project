@@ -120,6 +120,7 @@ def all_tweets():
         if request.method == "GET":
             cnx = connect_db()  
             tweets = Tweet.load_all_tweets(cnx.cursor())
+            dict = {'phy': 50, 'che': 60, 'maths': 70}
             html = '''
             <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
                 All Tweets
@@ -173,7 +174,7 @@ def all_tweets():
                     '''.format(tweet.id, tweet.text, user.id, user.email, datetime.date(tweet.creation_date))
             html += '''</table>'''
 
-            return render_template('all_tweets.html')
+            return render_template('all_tweets.html', result=dict)
       
         elif request.method == "POST":
             tweet = Tweet()
