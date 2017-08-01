@@ -35,27 +35,21 @@
                         <th align="right">Author</th>
                         <th align="right">Date Added</th>
                       </tr>
-                      <tr><td colspan="3"><hr></td></tr
+                      <tr><td colspan="3"><hr></td></tr>
 
-
-            <!--for tweet in tweets:-->
-                <!--user = User.load_user_by_id(cnx.cursor(), tweet.user_id)-->
-                <!--html +=-->
-                        <!--{% for tweet in tweets %}-->
-        <!--<li><a href="{{ item.href }}">{{ item.caption }}</a></li>-->
-
-                        <!--<tr>-->
-                            <!--<td>-->
-                                <!--<a href="http://127.0.0.1:5000/tweet_by_id/{}"-->
-                                <!--style="color: black;text-decoration:none">{}</a>-->
-                            <!--</td>-->
-                            <!--<td align="right">-->
-                                <!--<a href="http://127.0.0.1:5000/tweets_by_user_id/{}"-->
-                                <!--style="color: black;text-decoration:none">{}</a>-->
-                            <!--</td>-->
-                            <!--<td align="right">{}</td>-->
-                        <!--</tr>-->
-                    <!--'''.format(tweet.id, tweet.text, user.id, user.email, datetime.date(tweet.creation_date))-->
-                        <!--{% endfor %}-->
+                        {% for tweet in tweets %}
+                            <tr>
+                                <td>
+                                    <a href="http://127.0.0.1:5000/tweet_by_id/{{tweet.id}}"
+                                    style="color: black;text-decoration:none">{}</a>
+                                </td>
+                                <td align="right">
+                                    <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
+                                    style="color: black;text-decoration:none">{}</a>
+                                </td>
+                                <td align="right">datetime.date(tweet.creation_date)</td>
+                            </tr>
+                    <!--'''.format(tweet.id, tweet.text, user.id, user.email, )-->
+                        {% endfor %}
                     </table>
 {% endblock %}

@@ -114,80 +114,80 @@ def edit():
 
 @app.route("/all_tweets", methods=['GET', 'POST'])
 def all_tweets():
-    try:
-        if not session['logged_in']:
-            raise Exception
-        if request.method == "GET":
-            cnx = connect_db()  
-            tweets = Tweet.load_all_tweets(cnx.cursor())
-            html = '''
-            <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
-                All Tweets
-            </a><br>
-            <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">
-                Messages
-            </a><br>
-            <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">
-                New Message
-            </a><br>
-            <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">
-                Edit User
-            </a>
-            
-                    <table style="width:50%; margin-left:auto; margin-right:auto;">
-                      <tr>
-                      <td colspan = "3">
-                          <form method = 'POST'>
-                             <div class="form-group">
-                              <label for="new_tweet"><h3>New Tweet:</h3></label>
-                              <textarea class="form-control" rows="5" name="new_tweet" style="width:100%"></textarea>
-                              <input type="submit" value="Tweet">
-                             </div>
-                          </form>
-                      </td>
-                      </tr>
-                      <tr>
-                        <th align="left"><h3>All Tweets:</h3></th>
-                      </tr>
-                      <tr><td colspan="3"><hr></td></tr>
-                      <tr>
-                        <th align="left">Tweet Text</th>
-                        <th align="right">Author</th>
-                        <th align="right">Date Added</th>
-                      </tr>
-                      <tr><td colspan="3"><hr></td></tr>'''   
-            for tweet in tweets:
-                user = User.load_user_by_id(cnx.cursor(), tweet.user_id)
-                html += '''
-                        <tr>
-                            <td>
-                                <a href="http://127.0.0.1:5000/tweet_by_id/{}"
-                                style="color: black;text-decoration:none">{}</a>
-                            </td>
-                            <td align="right">
-                                <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
-                                style="color: black;text-decoration:none">{}</a>
-                            </td>
-                            <td align="right">{}</td>
-                        </tr>
-                    '''.format(tweet.id, tweet.text, user.id, user.email, datetime.date(tweet.creation_date))
-            html += '''</table>'''
+    # try:
+    #     if not session['logged_in']:
+#         raise Exception
+    if request.method == "GET":
+        cnx = connect_db()
+        tweets = Tweet.load_all_tweets(cnx.cursor())
+        html = '''
+        <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
+            All Tweets
+        </a><br>
+        <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">
+            Messages
+        </a><br>
+        <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">
+            New Message
+        </a><br>
+        <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">
+            Edit User
+        </a>
 
-            return render_template('all_tweets.html')
-      
-        elif request.method == "POST":
-            tweet = Tweet()
-            tweet.user_id = session['user_id']
-            tweet.text = request.form['new_tweet']
-            tweet.creation_date = datetime.now()
-            
-            cnx = connect_db()
-            tweet.add_tweet(cnx.cursor())
-            cnx.commit()
-            
-            return redirect(url_for('all_tweets'))
-    except Exception:
-        return redirect(url_for('login'))
+                <table style="width:50%; margin-left:auto; margin-right:auto;">
+                  <tr>
+                  <td colspan = "3">
+                      <form method = 'POST'>
+                         <div class="form-group">
+                          <label for="new_tweet"><h3>New Tweet:</h3></label>
+                          <textarea class="form-control" rows="5" name="new_tweet" style="width:100%"></textarea>
+                          <input type="submit" value="Tweet">
+                         </div>
+                      </form>
+                  </td>
+                  </tr>
+                  <tr>
+                    <th align="left"><h3>All Tweets:</h3></th>
+                  </tr>
+                  <tr><td colspan="3"><hr></td></tr>
+                  <tr>
+                    <th align="left">Tweet Text</th>
+                    <th align="right">Author</th>
+                    <th align="right">Date Added</th>
+                  </tr>
+                  <tr><td colspan="3"><hr></td></tr>'''
+        for tweet in tweets:
+            user = User.load_user_by_id(cnx.cursor(), tweet.user_id)
+            html += '''
+                    <tr>
+                        <td>
+                            <a href="http://127.0.0.1:5000/tweet_by_id/{}"
+                            style="color: black;text-decoration:none">{}</a>
+                        </td>
+                        <td align="right">
+                            <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
+                            style="color: black;text-decoration:none">{}</a>
+                        </td>
+                        <td align="right">{}</td>
+                    </tr>
+                '''.format(tweet.id, tweet.text, user.id, user.email, datetime.date(tweet.creation_date))
+        html += '''</table>'''
+
+        return render_template('all_tweets.html', tweets=tweets)
+    #
+    #     elif request.method == "POST":
+    #         tweet = Tweet()
+    #         tweet.user_id = session['user_id']
+    #         tweet.text = request.form['new_tweet']
+    #         tweet.creation_date = datetime.now()
+    #
+    #         cnx = connect_db()
+    #         tweet.add_tweet(cnx.cursor())
+    #         cnx.commit()
+    #
+    #         return redirect(url_for('all_tweets'))
+    # except Exception:
+    #     return redirect(url_for('login'))
 
 
 @app.route("/tweets_by_user_id/<user_id>", methods=['GET', 'POST'])
