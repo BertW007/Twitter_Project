@@ -41,13 +41,13 @@
                             <tr>
                                 <td>
                                     <a href="http://127.0.0.1:5000/tweet_by_id/{{tweet.id}}"
-                                    style="color: black;text-decoration:none">{}</a>
+                                    style="color: black;text-decoration:none">{{tweet.text}}</a>
                                 </td>
                                 <td align="right">
-                                    <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
-                                    style="color: black;text-decoration:none">{}</a>
+                                    <a href="http://127.0.0.1:5000/tweets_by_user_id/{{tweet.user_id}}"
+                                    style="color: black;text-decoration:none">{{tweet.user_email}}</a>
                                 </td>
-                                <td align="right">datetime.date(tweet.creation_date)</td>
+                                <td align="right">{{tweet.creation_date.strftime('%Y-%m-%d')}}</td>
                             </tr>
                     <!--'''.format(tweet.id, tweet.text, user.id, user.email, )-->
                         {% endfor %}
