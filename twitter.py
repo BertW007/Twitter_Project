@@ -25,13 +25,16 @@ def connect_db():
         cnx = connect(user=user, password=password, host=host, database=database)
         print("Connected...")
         return cnx
-        
     except ProgrammingError:
         print("Not connected...")
  
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():     
+def login():
+    """
+    This method handles login view.
+    :return: redirect to all_tweets view when login successful or back to login view if not.
+    """
     error = None
     if request.method == 'POST':
         username = request.form['username']
