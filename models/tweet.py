@@ -18,7 +18,7 @@ class Tweet(object):
         
     @staticmethod
     def load_all_tweets(cursor):
-        sql = "SELECT id, text, creation_date,user_id FROM Tweets ORDER BY -creation_date"
+        sql = "SELECT id, text, creation_date, Users.user_id, email FROM Tweets LEFT JOIN Users on Tweets.user_id = Users.user_id  ORDER BY -creation_date"
         ret = []
         result = cursor.execute(sql)
         data = cursor.fetchall()
@@ -29,6 +29,7 @@ class Tweet(object):
             loaded_tweet.text = row[1]
             loaded_tweet.creation_date = row[2]
             loaded_tweet.user_id = row[3]
+            loaded_tweet.email = row[4]
             ret.append(loaded_tweet)
         return ret
     
