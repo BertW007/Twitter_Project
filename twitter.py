@@ -8,9 +8,15 @@ from models.comment import *
 from models.crypto import *
 from models.message import *
 from datetime import datetime
+from app import app
 
 
 def connect_db():
+    """
+    This method is connecting to database using: user, password, host and database as listed below
+    :return: <mysql.connector.connection.MySQLConnection object> if connected or None otherwise
+
+    """
     user = 'root'
     password = 'coderslab'
     host = 'localhost'
@@ -22,8 +28,6 @@ def connect_db():
         
     except ProgrammingError:
         print("Not connected...")
-
-app = Flask(__name__)
  
 
 @app.route('/login', methods=['GET', 'POST'])
