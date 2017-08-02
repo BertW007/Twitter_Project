@@ -8,8 +8,8 @@ from models.comment import *
 from models.crypto import *
 from models.message import *
 from datetime import datetime
-from app import app
 
+app = Flask(__name__)
 
 def connect_db():
     """
