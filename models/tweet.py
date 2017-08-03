@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class Tweet(object):
     __id = None
     user_id = None

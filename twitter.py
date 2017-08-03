@@ -2,11 +2,11 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash, make_response
 from mysql.connector import connect
 from mysql.connector.errors import ProgrammingError
-from models.tweet import *
-from models.user import *
-from models.comment import *
-from models.crypto import *
-from models.message import *
+from models.tweet import Tweet
+from models.user import User
+from models.comment import Comment
+from models.crypto import check_password
+from models.message import Message
 from datetime import datetime
 
 app = Flask(__name__)
@@ -97,9 +97,13 @@ def register():
 
 @app.route('/edit', methods=['GET', 'POST'])
 def edit():
+    """
+    This method handles User Edition View.
+    :return: Redirect to all_tweets view when edition successful or back to Edit View if not.
+    """
     try:
         if not session['logged_in']:
-            raise Exception
+            raise BaseException
         
         cnx = connect_db()
         user = User.load_user_by_id(cnx.cursor(), session['user_id'])
@@ -120,7 +124,7 @@ def edit():
                 error = 'Different Passwords'
                 
         return render_template('edit.html', error=error, email=email)
-    except Exception:
+    except BaseException:
         return redirect(url_for('login'))
 
 
