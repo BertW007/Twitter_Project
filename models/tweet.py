@@ -19,7 +19,10 @@ class Tweet(object):
         
     @staticmethod
     def load_all_tweets(cursor):
-        sql = "SELECT id, text, creation_date, Users.user_id, email FROM Tweets LEFT JOIN Users on Tweets.user_id = Users.user_id  ORDER BY -creation_date"
+        sql = "SELECT id, text, creation_date, Users.user_id, email " \
+              "FROM Tweets " \
+              "JOIN Users ON Tweets.user_id = Users.user_id " \
+              "ORDER BY -creation_date"
         ret = []
         result = cursor.execute(sql)
         data = cursor.fetchall()
@@ -52,7 +55,10 @@ class Tweet(object):
         
     @staticmethod
     def load_tweets_by_user_id(cursor, user_id):
-        sql = "SELECT Tweets.id, Tweets.text, Tweets.creation_date, Users.name FROM Tweets JOIN Users ON Tweets.user_id=Users.user_id WHERE Users.user_id ={} ORDER BY -creation_date;".format(user_id)
+        sql = "SELECT id, text, creation_date " \
+              "FROM Tweets " \
+              "WHERE Tweets.user_id ={} " \
+              "ORDER BY -Tweets.creation_date;".format(user_id)  # TODO Calculate number of comments for each tweet
         print(sql)
         ret = []
         result = cursor.execute(sql)
