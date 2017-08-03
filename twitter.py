@@ -134,29 +134,29 @@ def all_tweets():
     This method handles All Tweets View.
     :return: If "GET" rendering template "all_tweets", If "POST" adding new Tweet to db and redirecting back to all_tweets.
     """
-    try:
-        if not session['logged_in']:
-            raise BaseException
+    # try:
+    #     if not session['logged_in']:
+    #         raise BaseException
 
-        if request.method == "GET":
-            cnx = connect_db()
-            tweets = Tweet.load_all_tweets(cnx.cursor())
-            return render_template('all_tweets.html', tweets=tweets)
+    if request.method == "GET":
+        cnx = connect_db()
+        tweets = Tweet.load_all_tweets(cnx.cursor())
+        return render_template('all_tweets.html', tweets=tweets)
 
-        elif request.method == "POST":
-            tweet = Tweet()
-            tweet.user_id = session['user_id']
-            tweet.text = request.form['new_tweet']
-            tweet.creation_date = datetime.now()
+    elif request.method == "POST":
+        tweet = Tweet()
+        tweet.user_id = session['user_id']
+        tweet.text = request.form['new_tweet']
+        tweet.creation_date = datetime.now()
 
-            cnx = connect_db()
-            tweet.add_tweet(cnx.cursor())
-            cnx.commit()
+        cnx = connect_db()
+        tweet.add_tweet(cnx.cursor())
+        cnx.commit()
 
-            return redirect(url_for('all_tweets'))
+        return redirect(url_for('all_tweets'))
 
-    except BaseException:
-        return redirect(url_for('login'))
+    # except BaseException:
+    #     return redirect(url_for('login'))
 
 
 @app.route("/tweets_by_user_id/<user_id>", methods=['GET', 'POST'])
