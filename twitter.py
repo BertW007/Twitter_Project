@@ -170,56 +170,6 @@ def tweets_by_user_id(user_id):
         tweets = Tweet.load_tweets_by_user_id(cnx.cursor(), user_id)
         user = User.load_user_by_id(cnx.cursor(), user_id)
         return render_template('tweet_by_user_id.html', tweets=tweets, user=user)
-            # html = '''
-            #     <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
-            #         All Tweets
-            #     </a><br>
-            #     <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">
-            #         Messages
-            #     </a><br>
-            #     <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">
-            #         New Message
-            #     </a><br>
-            #     <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">
-            #         Edit User
-            #     </a>
-            #
-            #     <table style="width:50%; margin-left:auto; margin-right:auto;">
-            #       <tr>
-            #             <th align="left"><h3>All Tweets by {}:</h3></th>
-            #             <th align="right">
-            #
-            #             </th>
-            #             <th align="right">
-            #             <form action="/new_message" method="GET">
-            #              <button type="submit" href="http://127.0.0.1:5000/new_message" class="btn btn-default">
-            #                 Send Message
-            #              </button>
-            #              <input type="hidden" name="recipient_email" value="{}">
-            #             </form>
-            #             </th>
-            #           </tr>
-            #           <tr><td colspan="3"><hr></td></tr>
-            #           <tr>
-            #             <th align="left">Tweet Text</th>
-            #             <th align="right">Comments</th>
-            #             <th align="right">Date Added</th>
-            #           </tr>
-            #           <tr><td colspan="3"><hr></td></tr>'''.format(user.email, user.email)
-            # for tweet in tweets:
-            #     comments = Comment.load_comments_by_tweet_id(cnx.cursor(), tweet.id)
-            #     html += '''
-            #         <tr>
-            #             <td>
-            #                 <a href="http://127.0.0.1:5000/tweet_by_id/{}" style="color: black;text-decoration:none">
-            #                 {}</a>
-            #             </td>
-            #             <td align="right">{}</td>
-            #             <td align="right">{}</td>
-            #         </tr>
-            #     </table>
-            #         '''.format(tweet.id, tweet.text, len(comments), datetime.date(tweet.creation_date))
-
 
     # except Exception:
     #         return redirect(url_for('login'))
