@@ -11,6 +11,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+
 def connect_db():
     """
     This method is connecting to database using: user, password, host and database as listed below
@@ -32,8 +33,8 @@ def connect_db():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """
-    This method handles login view.
-    :return: redirect to all_tweets view when login successful or back to login view if not.
+    This method handles Login View.
+    :return: Redirect to all_tweets view when login successful or back to login view if not.
     """
     error = None
     if request.method == 'POST':
@@ -41,7 +42,7 @@ def login():
         password = request.form['password']
         cnx = connect_db()  
         cursor = cnx.cursor()
-        sql = "SELECT user_id,hashed_password FROM Users WHERE email='{}'".format(username)
+        sql = "SELECT user_id, hashed_password FROM Users WHERE email='{}'".format(username)
         result = cursor.execute(sql)
         data = cursor.fetchone()
         if data is None:
@@ -56,7 +57,11 @@ def login():
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def register():     
+def register():
+    """
+    This method handles Register View.
+    :return: Redirect to all_tweets view when registration successful or back to Register View if not.
+    """
     error = None
     if request.method == 'POST':
         username = request.form['username']
@@ -524,7 +529,7 @@ def new_messages():
         
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-  
+
 
 if __name__ == "__main__":
     app.run()
