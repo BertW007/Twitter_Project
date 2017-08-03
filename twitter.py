@@ -130,9 +130,13 @@ def edit():
 
 @app.route("/all_tweets", methods=['GET', 'POST'])
 def all_tweets():
+    """
+    This method handles All Tweets View.
+    :return: If "GET" rendering template "all_tweets", If "POST" adding new Tweet to db and redirecting back to all_tweets.
+    """
     try:
         if not session['logged_in']:
-            raise Exception
+            raise BaseException
 
         if request.method == "GET":
             cnx = connect_db()
@@ -151,7 +155,7 @@ def all_tweets():
 
             return redirect(url_for('all_tweets'))
 
-    except Exception:
+    except BaseException:
         return redirect(url_for('login'))
 
 
