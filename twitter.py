@@ -160,7 +160,12 @@ def all_tweets():
 
 
 @app.route("/tweets_by_user_id/<user_id>", methods=['GET', 'POST'])
-def tweets_by_user_id(user_id): 
+def tweets_by_user_id(user_id):
+    """
+    This method handles Tweets by User View.
+    :param user_id:  Id of user for which we want to display Tweets.
+    :return: If "GET", rendering template "tweet_by_user_id.html"
+    """
     # try:
     #     if not session['logged_in']:
     #         raise Exception
