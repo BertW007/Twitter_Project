@@ -56,6 +56,18 @@ def login():
     return render_template('login.html', error=error)
 
 
+@app.route('/logout', methods=['GET'])
+def logout():
+    """
+    This method handles Logout View.
+    :return: Redirect to Login View.
+    """
+    error = None
+    if request.method == 'GET':
+        session['logged_in'] = False
+    return render_template('login.html', error=error)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """
