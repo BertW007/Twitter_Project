@@ -30,7 +30,7 @@
                     <a href="http://127.0.0.1:5000/tweet_by_id/{{tweet.id}}"
                        style="color: black;text-decoration:none">{{tweet.text}}</a>
                 </td>
-                <td align="right">?</td>
+                <td align="right">{{tweet.comments}}</td>
                 <td align="right">{{tweet.creation_date.strftime('%Y-%m-%d')}}</td>
             </tr>
         {% endfor %}
