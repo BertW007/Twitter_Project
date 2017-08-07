@@ -60,7 +60,7 @@ class Tweet(object):
         #       "WHERE Tweets.user_id ={} " \
         #       "ORDER BY -Tweets.creation_date;".format(user_id)  # TODO Calculate number of comments for each tweet
         sql = "SELECT id, text, creation_date, " \
-              "(SELECT count(*) FROM twitter_db.Comments WHERE Tweets.id=Comments.tweet_id) as 'Comments' " \
+              "(SELECT count(*) FROM twitter_db.Comments WHERE Tweets.id=Comments.tweet_id) as 'comments' " \
               "FROM Tweets WHERE Tweets.user_id ={} ORDER BY -Tweets.creation_date;".format(user_id)
 
         print(sql)
@@ -73,6 +73,7 @@ class Tweet(object):
             loaded_tweet.__id = row[0]
             loaded_tweet.text = row[1]
             loaded_tweet.creation_date = row[2]
+            loaded_tweet.comments = row[3]
             ret.append(loaded_tweet)
         return ret
         
