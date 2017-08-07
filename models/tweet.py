@@ -39,7 +39,7 @@ class Tweet(object):
     
     @staticmethod
     def load_tweet_by_id(cursor, id):
-        sql = "SELECT id, text, creation_date,user_id FROM Tweets WHERE id={}".format(id)
+        sql = "SELECT id, text, creation_date, user_id FROM Tweets WHERE id={}".format(id)
         result = cursor.execute(sql)
         data = cursor.fetchone()
          
@@ -55,10 +55,14 @@ class Tweet(object):
         
     @staticmethod
     def load_tweets_by_user_id(cursor, user_id):
-        sql = "SELECT id, text, creation_date " \
-              "FROM Tweets " \
-              "WHERE Tweets.user_id ={} " \
-              "ORDER BY -Tweets.creation_date;".format(user_id)  # TODO Calculate number of comments for each tweet
+        # sql = "SELECT id, text, creation_date " \
+        #       "FROM Tweets " \
+        #       "WHERE Tweets.user_id ={} " \
+        #       "ORDER BY -Tweets.creation_date;".format(user_id)  # TODO Calculate number of comments for each tweet
+        sql = "SELECT id, text, creation_date, " \
+              "(SELECT count(*) FROM twitter_db.Comments WHERE Tweets.id=Comments.tweet_id) as 'Comments' " \
+              "FROM Tweets WHERE Tweets.user_id ={} ORDER BY -Tweets.creation_date;".format(user_id)
+
         print(sql)
         ret = []
         result = cursor.execute(sql)
