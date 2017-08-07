@@ -65,7 +65,7 @@ def logout():
     error = None
     if request.method == 'GET':
         session['logged_in'] = False
-    return render_template('login.html', error=error)
+    return redirect(url_for('login'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
