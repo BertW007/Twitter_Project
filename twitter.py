@@ -62,7 +62,6 @@ def logout():
     This method handles Logout View.
     :return: Redirect to Login View.
     """
-    error = None
     if request.method == 'GET':
         session['logged_in'] = False
     return redirect(url_for('login'))
@@ -142,7 +141,8 @@ def edit():
 def all_tweets():
     """
     This method handles All Tweets View.
-    :return: If "GET" rendering template "all_tweets", If "POST" adding new Tweet to db and redirecting back to all_tweets.
+    :return: If "GET" rendering template "all_tweets",
+            If "POST" adding new Tweet to db and redirecting back to all_tweets.
     """
 
     if not session['logged_in']:
@@ -184,16 +184,16 @@ def tweets_by_user_id(user_id):
         return render_template('tweet_by_user_id.html', tweets=tweets, user=user)
 
 
-@app.route("/tweet_by_id/<id>", methods=['GET', 'POST'])
-def tweet_by_id(id):
+@app.route("/tweet_by_id/<tweet_id>", methods=['GET', 'POST'])
+def tweet_by_id(tweet_id):
     if not session['logged_in']:
         return redirect(url_for('login'))
 
     if request.method == "GET":
         cnx = connect_db()
-        tweet = Tweet.load_tweet_by_id(cnx.cursor(), id)
+        tweet = Tweet.load_tweet_by_id(cnx.cursor(), tweet_id)
         user = User.load_user_by_id(cnx.cursor(), tweet.user_id)
-        comments = Comment.load_comments_by_tweet_id(cnx.cursor(), id)
+        comments = Comment.load_comments_by_tweet_id(cnx.cursor(), tweet_id)
         html = '''
             <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
                 All Tweets
@@ -271,14 +271,14 @@ def tweet_by_id(id):
     elif request.method == "POST":
             comment = Comment()
             comment.user_id = session['user_id']
-            comment.tweet_id = id
+            comment.tweet_id = tweet_id
             comment.text = request.form['new_comment']
             comment.creation_date = datetime.now()
 
             cnx = connect_db()
             comment.add_comment(cnx.cursor())
             cnx.commit()
-            return redirect(('tweet_by_id/{}'.format(id)))
+            return redirect(('tweet_by_id/{}'.format(tweet_id)))
 
 
 @app.route("/messages", methods=['GET', 'POST'])
