@@ -170,7 +170,7 @@ def all_tweets():
 def tweets_by_user_id(user_id):
     """
     This method handles Tweets by User View.
-    :param user_id:  Id of user for which we want to display Tweets.
+    :param user_id:  Id of User for which we want to display Tweets.
     :return: If "GET", rendering template "tweet_by_user_id.html"
     """
 
@@ -186,6 +186,12 @@ def tweets_by_user_id(user_id):
 
 @app.route("/tweet_by_id/<tweet_id>", methods=['GET', 'POST'])
 def tweet_by_id(tweet_id):
+    """
+    This method handles Tweet by its Id View.
+    :param tweet_id: Id of Tweet for which we want to display Comments.
+    :return: If "GET" rendering template "tweet_by_id" and displays all comments for that Tweet,
+            If "POST" adds new Comment to db and redirecting back to tweet_by_id.
+    """
     if not session['logged_in']:
         return redirect(url_for('login'))
 
