@@ -1,5 +1,3 @@
-from datetime import datetime
-
 class Comment(object):
     __id = None
     user_id = None
@@ -17,41 +15,6 @@ class Comment(object):
     @property
     def id(self):
         return self.__id
-        
-#     @staticmethod
-#     def load_all_tweets(cursor):
-#         sql = "SELECT id, text, creation_date,user_id FROM Tweets ORDER BY -creation_date"
-#         ret = []
-#         result = cursor.execute(sql)
-#         data = cursor.fetchall()
-# 
-#         for row in data:
-#             loaded_tweet = Tweet()
-#             loaded_tweet.__id = row[0]
-#             loaded_tweet.text = row[1]
-#             loaded_tweet.creation_date = row[2]
-#             loaded_tweet.user_id = row[3]
-#             ret.append(loaded_tweet)
-#         return ret
-    
-#     @staticmethod
-#     def load_comment_by_id(cursor, id):
-#         sql = """SELECT id,user_id,tweet_id ,text, creation_date
-#                 FROM Comments WHERE id={}""".format(id)
-#         result = cursor.execute(sql)
-#         data = cursor.fetchone()
-#          
-#         if data is not None:
-#             loaded_comment = Comment()
-#             loaded_comment.__id = data[0]
-#             loaded_comment.user_id = data[1]
-#             loaded_comment.tweet_id = data[2]
-#             loaded_comment.text = data[3]
-#             loaded_comment.creation_date = data[4]
-#             
-#             return loaded_tweet
-#         else:
-#             return None
         
     @staticmethod
     def load_comments_by_tweet_id(cursor, tweet_id):
