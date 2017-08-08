@@ -15,7 +15,7 @@
         <th align="left">{{tweet.id}}</th>
         <th align="left">{{tweet.text}}</th>
         <th align="right">
-        <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
+        <a href="http://127.0.0.1:5000/tweets_by_user_id/{{user.id}}"
         style="color: black;text-decoration:none">{{user.email}}</a>
         </th>
         <th align="right">{{tweet.creation_date.strftime('%Y-%m-%d')}}</th>
@@ -26,6 +26,7 @@
 </table>
 
 <table style="width:50%; margin-left:auto; margin-right:auto;">
+
     <tr>
          <th align="left"><h4>Comments</h4></th>
          <th align="right"><h4>Author</h4></th>
@@ -37,26 +38,12 @@
     <tr>
         <td align="left">{{comment.text}}</td>
         <td align="right">
-            <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
-            style="color: black;text-decoration:none">{{comment.user_id}}</a>
+            <a href="http://127.0.0.1:5000/tweets_by_user_id/{{user.id}}"
+            style="color: black;text-decoration:none">{{comment.email}}</a>
         </td>
         <td align="right">{{comment.creation_date.strftime('%Y-%m-%d')}}</td>
     </tr>
     {% endfor %}
-
-    <!--for comment in comments:-->
-    <!--user_com = User.load_user_by_id(cnx.cursor(), comment.user_id)-->
-    <!--html += '''-->
-    <!--<tr>-->
-    <!--<td align="left">{}</td>-->
-    <!--<td align="right">-->
-    <!--<a href="http://127.0.0.1:5000/tweets_by_user_id/{}"-->
-    <!--style="color: black;text-decoration:none">-->
-    <!--{}</a>-->
-    <!--</td>-->
-    <!--<td align="right">{}</td>-->
-    <!--</tr>-->
-    <!--'''.format(comment.text, user_com.id, user_com.email, datetime.date(comment.creation_date))-->
 
     <tr>
         <td colspan="4"><hr></td>

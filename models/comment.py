@@ -55,7 +55,7 @@ class Comment(object):
         
     @staticmethod
     def load_comments_by_tweet_id(cursor, tweet_id):
-        sql = """SELECT Comments.id, Users.name, Comments.text, Comments.creation_date
+        sql = """SELECT Comments.id, Comments.text, Comments.creation_date, Users.user_id, Users.email
                  FROM Comments
                  JOIN Users ON Comments.user_id=Users.user_id
                  WHERE Comments.tweet_id = {}
@@ -68,9 +68,10 @@ class Comment(object):
         for row in data:
             loaded_comment = Comment()
             loaded_comment.__id = row[0]
-            loaded_comment.user_id = row[1]
-            loaded_comment.text = row[2]
-            loaded_comment.creation_date = row[3]
+            loaded_comment.text = row[1]
+            loaded_comment.creation_date = row[2]
+            loaded_comment.user_id = row[3]
+            loaded_comment.email = row[4]
             ret.append(loaded_comment)
         return ret
 
