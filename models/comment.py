@@ -55,9 +55,11 @@ class Comment(object):
         
     @staticmethod
     def load_comments_by_tweet_id(cursor, tweet_id):
-        sql = """SELECT Comments.id, Comments.user_id, Comments.text, Comments.creation_date 
-                FROM Comments JOIN Tweets ON Comments.tweet_id=Tweets.id 
-                WHERE Comments.tweet_id ={} ORDER BY -Comments.creation_date;""".format(tweet_id)
+        sql = """SELECT Comments.id, Users.name, Comments.text, Comments.creation_date
+                 FROM Comments
+                 JOIN Users ON Comments.user_id=Users.user_id
+                 WHERE Comments.tweet_id = {}
+                 ORDER BY -Comments.creation_date;""".format(tweet_id)
         print(sql)
         ret = []
         result = cursor.execute(sql)
