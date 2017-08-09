@@ -226,90 +226,90 @@ def messages():
         print(received)
         sent = Message.load_messages_by_sender_id(cnx.cursor(), session['user_id'])
         print(sent)
-        html = '''
-            <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
-                All Tweets
-            </a><br>
-            <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">
-                Messages
-            </a><br>
-            <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">
-                New Message
-            </a><br>
-            <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">
-            Edit User</a>
-
-            <table style="width:50%; margin-left:auto; margin-right:auto;">
-              <tr>
-                <th align="left"><h3>Received:</h3></th>
-              <tr>
-              <tr>
-                 <th align="left"><h3>From</h3></th>
-                 <th align="left"><h3>Title</h3></th>
-                 <th align="right"><h3>Status</h3></th>
-                 <th align="right"><h3>Date</h3></th>
-              </tr>
-              <tr><td colspan="4"><hr></td></tr>
-            '''
-
-        for message in received:
-            if message.status == 0:
-                color = 'red'
-            else:
-                color = 'black'
-            user = User.load_user_by_id(cnx.cursor(), message.sender_id)
-            html += '''
-                <tr>
-                    <td align="left">
-                        <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
-                        style="color: black;text-decoration:none">{}</a>
-                    </td>
-                    <td align="left">
-                        <a href="http://127.0.0.1:5000/message_by_id/{}"
-                        style="color: {};text-decoration:none">{}</a>
-                    </td>
-                    <td align="right">{}</td>
-                    <td align="right">{}</td>
-                </tr>
-                    '''.format(user.id, user.email, message.id, color, message.title, message.status,
-                               datetime.date(message.creation_date))
-        html += '''
-
-                <table style="width:50%; margin-left:auto; margin-right:auto;">
-                  <tr>
-                    <th align="left"><h3>Sent:</h3></th>
-                  <tr>
-                  <tr>
-                     <th align="left"><h3>To</h3></th>
-                     <th align="left"><h3>Title</h3></th>
-                     <th align="right"><h3>Status</h3></th>
-                     <th align="right"><h3>Date</h3></th>
-                  </tr>
-                  <tr><td colspan="4"><hr></td></tr>
-                '''
-
-        for message in sent:
-            if message.status == 0:
-                color = 'red'
-            else:
-                color = 'black'
-            user = User.load_user_by_id(cnx.cursor(), message.recipient_id)
-            html += '''
-                    <tr>
-                    <td align="left">
-                        <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
-                        style="color: black;text-decoration:none">{}</a>
-                    </td>
-                    <td align="left">
-                        <a href="http://127.0.0.1:5000/message_by_id/{}"
-                        style="color: {};text-decoration:none">{}</a>
-                    </td>
-                    <td align="right">{}</td>
-                    <td align="right">{}</td>
-                  </tr>
-                      '''.format(user.id, user.email, message.id, color, message.title, message.status,
-                                 datetime.date(message.creation_date))
-        return html
+        # html = '''
+        #     <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
+        #         All Tweets
+        #     </a><br>
+        #     <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">
+        #         Messages
+        #     </a><br>
+        #     <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">
+        #         New Message
+        #     </a><br>
+        #     <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">
+        #     Edit User</a>
+        #
+        #     <table style="width:50%; margin-left:auto; margin-right:auto;">
+        #       <tr>
+        #         <th align="left"><h3>Received:</h3></th>
+        #       <tr>
+        #       <tr>
+        #          <th align="left"><h3>From</h3></th>
+        #          <th align="left"><h3>Title</h3></th>
+        #          <th align="right"><h3>Status</h3></th>
+        #          <th align="right"><h3>Date</h3></th>
+        #       </tr>
+        #       <tr><td colspan="4"><hr></td></tr>
+        #     '''
+        #
+        # for message in received:
+        #     if message.status == 0:
+        #         color = 'red'
+        #     else:
+        #         color = 'black'
+        #     user = User.load_user_by_id(cnx.cursor(), message.sender_id)
+        #     html += '''
+        #         <tr>
+        #             <td align="left">
+        #                 <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
+        #                 style="color: black;text-decoration:none">{}</a>
+        #             </td>
+        #             <td align="left">
+        #                 <a href="http://127.0.0.1:5000/message_by_id/{}"
+        #                 style="color: {};text-decoration:none">{}</a>
+        #             </td>
+        #             <td align="right">{}</td>
+        #             <td align="right">{}</td>
+        #         </tr>
+        #             '''.format(user.id, user.email, message.id, color, message.title, message.status,
+        #                        datetime.date(message.creation_date))
+        # html += '''
+        #
+        #         <table style="width:50%; margin-left:auto; margin-right:auto;">
+        #           <tr>
+        #             <th align="left"><h3>Sent:</h3></th>
+        #           <tr>
+        #           <tr>
+        #              <th align="left"><h3>To</h3></th>
+        #              <th align="left"><h3>Title</h3></th>
+        #              <th align="right"><h3>Status</h3></th>
+        #              <th align="right"><h3>Date</h3></th>
+        #           </tr>
+        #           <tr><td colspan="4"><hr></td></tr>
+        #         '''
+        #
+        # for message in sent:
+        #     if message.status == 0:
+        #         color = 'red'
+        #     else:
+        #         color = 'black'
+        #     user = User.load_user_by_id(cnx.cursor(), message.recipient_id)
+        #     html += '''
+        #             <tr>
+        #             <td align="left">
+        #                 <a href="http://127.0.0.1:5000/tweets_by_user_id/{}"
+        #                 style="color: black;text-decoration:none">{}</a>
+        #             </td>
+        #             <td align="left">
+        #                 <a href="http://127.0.0.1:5000/message_by_id/{}"
+        #                 style="color: {};text-decoration:none">{}</a>
+        #             </td>
+        #             <td align="right">{}</td>
+        #             <td align="right">{}</td>
+        #           </tr>
+        #               '''.format(user.id, user.email, message.id, color, message.title, message.status,
+        #                          datetime.date(message.creation_date))
+        return render_template('messages.html', received=received, sent=sent)
 
 
 @app.route("/message_by_id/<message_id>", methods=['GET', 'POST'])
@@ -383,7 +383,7 @@ def message_by_id(message_id):
 
 
 @app.route("/new_message", methods=['GET', 'POST'])
-def new_messages():
+def new_message():
     if not session['logged_in']:
         return redirect(url_for('login'))
 
@@ -413,7 +413,7 @@ def new_messages():
             message.send_message(cnx.cursor())
             cnx.commit()
             return redirect('messages')
-    return render_template('message.html', error=error, mail=mail)
+    return render_template('new_message.html', error=error, mail=mail)
 
         
 # set the secret key.  keep this really secret:
