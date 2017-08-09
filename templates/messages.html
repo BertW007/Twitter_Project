@@ -2,20 +2,19 @@
 
 {% block tweets %}
 
-            <table style="width:50%; margin-left:auto; margin-right:auto;">
-              <tr>
-                <th align="left"><h3>Received:</h3></th>
-              <tr>
-              <tr>
-                 <th align="left"><h3>From</h3></th>
-                 <th align="left"><h3>Title</h3></th>
-                 <th align="right"><h3>Status</h3></th>
-                 <th align="right"><h3>Date</h3></th>
-              </tr>
-              <tr><td colspan="4"><hr></td></tr>
-            '''
+    <table style="width:50%; margin-left:auto; margin-right:auto;">
+      <tr>
+        <th align="left"><h3>Received:</h3></th>
+      <tr>
+      <tr>
+         <th align="left"><h3>From</h3></th>
+         <th align="left"><h3>Title</h3></th>
+         <th align="right"><h3>Status</h3></th>
+         <th align="right"><h3>Date</h3></th>
+      </tr>
+      <tr><td colspan="4"><hr></td></tr>
 
-        for message in received:
+    {% for message in received %}
             if message.status == 0:
                 color = 'red'
             else:
@@ -36,22 +35,23 @@
                 </tr>
                     '''.format(user.id, user.email, message.id, color, message.title, message.status,
                                datetime.date(message.creation_date))
-        html += '''
+    {% endfor %}
 
-                <table style="width:50%; margin-left:auto; margin-right:auto;">
-                  <tr>
-                    <th align="left"><h3>Sent:</h3></th>
-                  <tr>
-                  <tr>
-                     <th align="left"><h3>To</h3></th>
-                     <th align="left"><h3>Title</h3></th>
-                     <th align="right"><h3>Status</h3></th>
-                     <th align="right"><h3>Date</h3></th>
-                  </tr>
-                  <tr><td colspan="4"><hr></td></tr>
-                '''
+    </table>
 
-        for message in sent:
+    <table style="width:50%; margin-left:auto; margin-right:auto;">
+      <tr>
+        <th align="left"><h3>Sent:</h3></th>
+      <tr>
+      <tr>
+         <th align="left"><h3>To</h3></th>
+         <th align="left"><h3>Title</h3></th>
+         <th align="right"><h3>Status</h3></th>
+         <th align="right"><h3>Date</h3></th>
+      </tr>
+      <tr><td colspan="4"><hr></td></tr>
+
+    {% for message in sent %}
             if message.status == 0:
                 color = 'red'
             else:
@@ -72,6 +72,8 @@
                   </tr>
                       '''.format(user.id, user.email, message.id, color, message.title, message.status,
                                  datetime.date(message.creation_date))
+
+    {% endfor %}
 {% endblock %}
 
 
