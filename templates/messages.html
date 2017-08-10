@@ -15,24 +15,24 @@
       <tr><td colspan="4"><hr></td></tr>
 
     {% for message in received %}
-                <tr>
-                    <td align="left">
-                        <a href="http://127.0.0.1:5000/tweets_by_user_id/{{message.sender_id}}"
-                        style="color: black;text-decoration:none">{{message.sender_email}}</a>
-                    </td>
-                    <td align="left">
-                        <a href="http://127.0.0.1:5000/message_by_id/{{message.id}}"
-                        style="color:
-                            {% if message.status == 0 %}
-                                    red
-                            {% else %}
-                                    black
-                            {% endif %}
-                        ;text-decoration:none">{{message.title}}</a>
-                    </td>
-                    <td align="right">{{message.status}}</td>
-                    <td align="right">{{message.creation_date}}</td>
-                </tr>
+        <tr>
+            <td align="left">
+                <a href="http://127.0.0.1:5000/tweets_by_user_id/{{message.sender_id}}"
+                style="color: black;text-decoration:none">{{message.sender_email}}</a>
+            </td>
+            <td align="left">
+                <a href="http://127.0.0.1:5000/message_by_id/{{message.id}}"
+                style="color:
+                    {% if message.status == 0 %}
+                            red
+                    {% else %}
+                            black
+                    {% endif %}
+                ;text-decoration:none">{{message.title}}</a>
+            </td>
+            <td align="right">{{message.status}}</td>
+            <td align="right">{{message.creation_date}}</td>
+        </tr>
     {% endfor %}
 
     </table>
@@ -50,25 +50,24 @@
       <tr><td colspan="4"><hr></td></tr>
 
     {% for message in sent %}
-                    <tr>
-                    <td align="left">
-                        <a href="http://127.0.0.1:5000/tweets_by_user_id/{{user.id}}"
-                        style="color: black;text-decoration:none">{{user.email}}</a>
-                    </td>
-                    <td align="left">
-                        <a href="http://127.0.0.1:5000/message_by_id/{{message.id}}"
-                        style="color:
-                            {% if message.status == 0 %}
-                                    red
-                            {% else %}
-                                    black
-                            {% endif %}
-                        ;text-decoration:none">ble</a>
-                    </td>
-                    <td align="right">{{message.status}}</td>
-                    <td align="right">{{message.creation_date}}</td>
-                  </tr>
+        <tr>
+        <td align="left">
+            <a href="http://127.0.0.1:5000/tweets_by_user_id/{{message.recipient_id}}"
+            style="color: black;text-decoration:none">{{message.recipient_email}}</a>
+        </td>
+        <td align="left">
+            <a href="http://127.0.0.1:5000/message_by_id/{{message.id}}"
+            style="color:
+                {% if message.status == 0 %}
+                        red
+                {% else %}
+                        black
+                {% endif %}
+            ;text-decoration:none">{{message.title}}</a>
+        </td>
+        <td align="right">{{message.status}}</td>
+        <td align="right">{{message.creation_date}}</td>
+      </tr>
     {% endfor %}
+    </table>
 {% endblock %}
-
-
