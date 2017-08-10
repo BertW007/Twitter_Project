@@ -39,7 +39,7 @@ class Message(object):
 #         return ret
     
     @staticmethod
-    def load_messages_by_sender_id(cursor,sender_id):
+    def load_messages_by_sender_id(cursor, ):
         sql = """SELECT id,recipient_id,title,text,status,creation_date
                 FROM Messages WHERE sender_id={} ORDER BY -creation_date""".format(sender_id)
         print(sql)
@@ -59,9 +59,12 @@ class Message(object):
         return ret
     
     @staticmethod
-    def load_messages_by_recipient_id(cursor,recipient_id):
-        sql = """SELECT id,sender_id,title,text,status,creation_date
-                FROM Messages WHERE recipient_id={} ORDER BY -creation_date""".format(recipient_id)
+    def load_messages_by_recipient_id(cursor, recipient_id):
+        sql = """SELECT id, sender_id, title, text, status, creation_date, email
+                 FROM Messages
+                 JOIN Users ON Messages.sender_id=Users.user_id
+                 WHERE recipient_id={}
+                 ORDER BY -creation_date""".format(recipient_id)
         print(sql)
         result = cursor.execute(sql)
         data = cursor.fetchall()
@@ -75,6 +78,7 @@ class Message(object):
             loaded_message.text = row[3]
             loaded_message.status = row[4]
             loaded_message.creation_date = row[5]
+            loaded_message.sender_email = row[6]
             ret.append(loaded_message)
         return ret
     
