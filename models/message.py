@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class Message(object):
     __id = None
     sender_id = None

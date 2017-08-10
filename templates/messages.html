@@ -31,7 +31,7 @@
                 ;text-decoration:none">{{message.title}}</a>
             </td>
             <td align="right">{{message.status}}</td>
-            <td align="right">{{message.creation_date}}</td>
+            <td align="right">{{message.creation_date.strftime('%Y-%m-%d')}}</td>
         </tr>
     {% endfor %}
 
@@ -66,8 +66,10 @@
             ;text-decoration:none">{{message.title}}</a>
         </td>
         <td align="right">{{message.status}}</td>
-        <td align="right">{{message.creation_date}}</td>
+        <td align="right">{{message.creation_date.strftime('%Y-%m-%d')}}</td>
       </tr>
     {% endfor %}
+
     </table>
+
 {% endblock %}
