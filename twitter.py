@@ -236,65 +236,66 @@ def message_by_id(message_id):
         cnx = connect_db()
         cursor = cnx.cursor()
         message = Message.load_message_by_id(cnx.cursor(), message_id)
-        sender = User.load_user_by_id(cnx.cursor(), message.sender_id)
-        recipient = User.load_user_by_id(cnx.cursor(), message.recipient_id)
+        # sender = User.load_user_by_id(cnx.cursor(), message.sender_id)
+        # recipient = User.load_user_by_id(cnx.cursor(), message.recipient_id)
         sql = "UPDATE Messages SET status= 1 WHERE id={};".format(message_id)
         print(sql)
         cursor.execute(sql)
         cnx.commit()
+        return render_template('message_by_id.html', message=message, sender=sender, recipient=recipient)
 
-        html = '''
-            <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
-                All Tweets
-            </a><br>
-            <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">
-                Messages
-            </a><br>
-            <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">
-                New Message
-            </a><br>
-            <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">
-                Edit User
-            </a>
-
-            <table style="width:50%; margin-left:auto; margin-right:auto;">
-              <tr>
-                 <th align="left"><h3>From:</h3></th>
-                 <td>{}</td>
-              </tr>
-              <tr>
-                 <th align="left"><h3>To:</h3></th>
-                 <td>{}</td>
-              </tr>
-              <tr>
-                 <th align="left"><h3>Sent on:</h3></th>
-                 <td>{}</td>
-             </tr>
-             <tr><td colspan="4"><hr></td></tr>
-              <tr>
-                 <th align="left"><h3>Title:</h3></th>
-                 <td>{}</td>
-              </tr>
-              <tr><td colspan="4"><hr></td></tr>
-              <tr>
-                 <th align="left"><h3>Message:</h3></th>
-                 <td>{}</td>
-              </tr>
-              <tr><td colspan="4"><hr></td></tr>
-               <tr>
-                  <td>
-                    <form action="/new_message" method="GET">
-                     <button type="submit" href="http://127.0.0.1:5000/new_message" class="btn btn-default">
-                        Reply
-                     </button>
-                     <input type="hidden" name="recipient_email" value="{}">
-                    </form>
-                   </td>
-                </tr>
-            </table>
-                '''.format(sender.email, recipient.email, message.creation_date,
-                           message.title, message.text, sender.email)
-        return html
+        # html = '''
+        #     <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
+        #         All Tweets
+        #     </a><br>
+        #     <a href="http://127.0.0.1:5000/messages" type="button" style="color:black" class="btn btn-default">
+        #         Messages
+        #     </a><br>
+        #     <a href="http://127.0.0.1:5000/new_message" type="button" style="color:black" class="btn btn-default">
+        #         New Message
+        #     </a><br>
+        #     <a href="http://127.0.0.1:5000/edit" type="button" style="color:black" class="btn btn-default">
+        #         Edit User
+        #     </a>
+        #
+        #     <table style="width:50%; margin-left:auto; margin-right:auto;">
+        #       <tr>
+        #          <th align="left"><h3>From:</h3></th>
+        #          <td>{}</td>
+        #       </tr>
+        #       <tr>
+        #          <th align="left"><h3>To:</h3></th>
+        #          <td>{}</td>
+        #       </tr>
+        #       <tr>
+        #          <th align="left"><h3>Sent on:</h3></th>
+        #          <td>{}</td>
+        #      </tr>
+        #      <tr><td colspan="4"><hr></td></tr>
+        #       <tr>
+        #          <th align="left"><h3>Title:</h3></th>
+        #          <td>{}</td>
+        #       </tr>
+        #       <tr><td colspan="4"><hr></td></tr>
+        #       <tr>
+        #          <th align="left"><h3>Message:</h3></th>
+        #          <td>{}</td>
+        #       </tr>
+        #       <tr><td colspan="4"><hr></td></tr>
+        #        <tr>
+        #           <td>
+        #             <form action="/new_message" method="GET">
+        #              <button type="submit" href="http://127.0.0.1:5000/new_message" class="btn btn-default">
+        #                 Reply
+        #              </button>
+        #              <input type="hidden" name="recipient_email" value="{}">
+        #             </form>
+        #            </td>
+        #         </tr>
+        #     </table>
+        #         '''.format(sender.email, recipient.email, message.creation_date,
+        #                    message.title, message.text, sender.email)
+        # return html
 
 
 @app.route("/new_message", methods=['GET', 'POST'])
