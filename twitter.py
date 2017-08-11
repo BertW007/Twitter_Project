@@ -242,7 +242,7 @@ def message_by_id(message_id):
         print(sql)
         cursor.execute(sql)
         cnx.commit()
-        return render_template('message_by_id.html', message=message, sender=sender, recipient=recipient)
+        return render_template('message_by_id.html', message=message)
 
         # html = '''
         #     <a href="http://127.0.0.1:5000/all_tweets" type="button" style="color:black" class="btn btn-default">
