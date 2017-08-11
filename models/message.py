@@ -97,8 +97,8 @@ class Message(object):
          
         if data is not None:
             loaded_message = Message()
-            loaded_message.recipient_id = data[0]
-            loaded_message.sender_id = data[1]
+            loaded_message.sender_id = data[0]
+            loaded_message.recipient_id = data[1]
             loaded_message.title = data[2]
             loaded_message.text = data[3]
             loaded_message.status = data[4]
