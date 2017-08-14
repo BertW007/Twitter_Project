@@ -254,6 +254,11 @@ def message_by_id(message_id):
 
 @app.route("/new_message", methods=['GET', 'POST'])
 def new_message():
+    """
+    This method handles New Message View.
+    :return: If "GET" rendering template "new_message" with form for new message,
+            If "POST" adds New Message to db and redirecting back to messages.
+    """
     if not session['logged_in']:
         return redirect(url_for('login'))
 
