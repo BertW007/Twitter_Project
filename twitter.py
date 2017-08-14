@@ -233,6 +233,11 @@ def messages():
 
 @app.route("/message_by_id/<message_id>", methods=['GET', 'POST'])
 def message_by_id(message_id):
+    """
+    This method handles Message by its Id View.
+    :param message_id: Id of Message for which we want to display information.
+    :return: If "GET" rendering template "message_by_id" and displays all information for that message,
+    """
     if not session['logged_in']:
         return redirect(url_for('login'))
 
