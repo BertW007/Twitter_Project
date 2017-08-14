@@ -89,16 +89,18 @@ class Message(object):
     
     @staticmethod
     def load_message_by_id(cursor,message_id):
-        sql = """SELECT sender_id,recipient_id,title,text,status,creation_date
-                FROM Messages WHERE id={}""".format(message_id)
+        sql = """SELECT U1.email,U2.email,title,text,status,creation_date FROM Messages
+                 JOIN Users U1 ON U1.user_id=Messages.sender_id
+                 JOIN Users U2 ON U2.user_id=Messages.recipient_id
+                 WHERE id={};""".format(message_id)
         print(sql)
         result = cursor.execute(sql)
         data = cursor.fetchone()
          
         if data is not None:
             loaded_message = Message()
-            loaded_message.sender_id = data[0]
-            loaded_message.recipient_id = data[1]
+            loaded_message.sender_email = data[0]
+            loaded_message.recipient_email = data[1]
             loaded_message.title = data[2]
             loaded_message.text = data[3]
             loaded_message.status = data[4]
