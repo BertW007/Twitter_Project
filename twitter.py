@@ -217,6 +217,10 @@ def tweet_by_id(tweet_id):
 
 @app.route("/messages", methods=['GET', 'POST'])
 def messages():
+    """
+    This method handles Messages View.
+    :return: If "GET" rendering template "messages.html" and displays all Messages received and send by logged user,
+    """
     if not session['logged_in']:
         return redirect(url_for('login'))
 
