@@ -1,10 +1,13 @@
 @import "bourbon";
 
 body {
-	background: #eee !important;	
+	background: #eee !important;
+	font-family: "Times New Roman", Times, serif;
 }
 
-.error          { background: #f0d6d6; padding: 0.5em; }
+.error  {
+    background: #f0d6d6; padding: 0.5em;
+}
 
 .wrapper {	
 	margin-top: 80px;
