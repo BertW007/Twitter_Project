@@ -1,7 +1,28 @@
 <!DOCTYPE html>
-<title>Twitter</title>
+<head>
+    <title>Twitter</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+
 <html>
     <body>
+        <nav class="navbar navbar-inverse">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <div style="display:inline"><a class="navbar-brand"  href="http://127.0.0.1:5000/all_tweets">All Tweets</a></div>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li><a href="http://127.0.0.1:5000/messages">Messages</a></li>
+                <li><a href="http://127.0.0.1:5000/new_message">New Message</a></li>
+                <li><a href="http://127.0.0.1:5000/edit">Edit User</a></li>
+                <li><a href="http://127.0.0.1:5000/logout">Logout</a>
+              </ul>
+            </div>
+          </div>
+        </nav>
 
         {% block body %}
         {% endblock %}
