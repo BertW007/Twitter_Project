@@ -6,7 +6,7 @@ from models.tweet import Tweet
 from models.user import User
 from models.comment import Comment
 from models.crypto import check_password
-from models.message import Message
+from .models.message import Message
 from datetime import datetime
 
 app = Flask(__name__)
