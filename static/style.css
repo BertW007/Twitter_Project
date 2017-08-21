@@ -6,13 +6,17 @@ body {
 	font-size: 18px;
 }
 
+hr {
+    border-top: 1px solid black;
+}
+
 .error  {
     background: #f0d6d6; padding: 0.5em;
 }
 
 .wrapper {	
-	margin-top: 80px;
-  margin-bottom: 80px;
+    margin-top: 80px;
+    margin-bottom: 80px;
 }
 
 .form-signin {
