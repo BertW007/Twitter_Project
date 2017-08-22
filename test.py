@@ -10,7 +10,7 @@ host = 'localhost'
 database = 'twitter_db'
 
 
-def connect_db(user,password,host,database):
+def connect_db(user, password, host, database):
     try:
         cnx = connect(user=user, password=password, host=host, database=database)
         cursor = cnx.cursor()
@@ -29,8 +29,8 @@ def disconnect():
 def testCreateUser():
     new_user = User()
     new_user.name = 'sam'
-    new_user.email = 'sam@gamgee.com'
-    new_user.set_password('sam',None)
+    new_user.email = 'sam@gamgee1.com'
+    new_user.set_password('sam', None)
     
     try:
         cnx = connect(user=user, password=password, host=host, database=database)
@@ -55,7 +55,7 @@ def testReadUser():
         print("Connected...")
         cursor = cnx.cursor()  
         try:      
-            read_user = User.load_user_by_id(cursor,5)
+            read_user = User.load_user_by_id(cursor, 5)
             print(read_user.username, '-', read_user.email)
         except AttributeError:
             print('There is no such record in database...')
@@ -78,7 +78,7 @@ def testAllUsers():
         try:      
             users = User.load_all_users(cursor)
             for i in users:
-                print(i.username, '-' , i.email)
+                print(i.username, '-', i.email)
         except AttributeError:
             print('There is no such record in database...')
             
@@ -98,11 +98,11 @@ def testModifyUser():
         print("Connected...")
         cursor = cnx.cursor()  
         try:      
-            mod_user = User.load_user_by_id(cursor,5)
-            print(mod_user.username, '-' , mod_user.email)
+            mod_user = User.load_user_by_id(cursor, 5)
+            print(mod_user.username, '-', mod_user.email)
             mod_user.username = 'smeagol'
             mod_user.email = 'smeagol@ring.com'
-            print(mod_user.username, '-' , mod_user.email)
+            print(mod_user.username, '-', mod_user.email)
             mod_user.save_to_db(cursor)
             
         except TypeError:
@@ -124,7 +124,7 @@ def testDeleteUser():
         print("Connected...")
         cursor = cnx.cursor()  
         try:      
-            del_user = User.load_user_by_id(cursor,5)
+            del_user = User.load_user_by_id(cursor, 5)
             del_user.delete(cursor)
             
         except TypeError:
