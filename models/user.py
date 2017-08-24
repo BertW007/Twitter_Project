@@ -22,20 +22,21 @@ class User(object):
     def hashed_password(self):
         return self.__hashed_password
     
-    def set_password(self, password,salt):
+    def set_password(self, password, salt):
         self.__hashed_password = password_hash(password, salt)
         
     def save_to_db(self, cursor):
         if self.__id == -1:
-            sql_guery = """
+            sql = """
                 INSERT INTO Users(name,hashed_password,email)
-                VALUES('{}','{}','{}');""".format(self.username,self.hashed_password,self.email)
+                VALUES('{}','{}','{}');""".format(self.username, self.hashed_password, self.email)
                 
-            cursor.execute(sql_guery)
+            cursor.execute(sql)
             self.__id = cursor.lastrowid
             return True
         else:
-            sql = "UPDATE Users SET name='{}',email='{}',hashed_password='{}' WHERE user_id={};".format(self.username, self.email, self.hashed_password, self.__id)
+            sql = "UPDATE Users SET name='{}',email='{}',hashed_password='{}'" \
+                  " WHERE user_id={};".format(self.username, self.email, self.hashed_password, self.__id)
             print(sql)
             cursor.execute(sql)
             return True

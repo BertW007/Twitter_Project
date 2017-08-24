@@ -51,6 +51,4 @@ class Comment(object):
 #             sql = "UPDATE Tweets SET text='{}',creation_date='{}' WHERE tweet_id={};".format(self.text, self.creation_date,  self.__id)
 #             print(sql)
 #             cursor.execute(sql)
-#             return True
-        
-    
+#             return True TODO: new feature updating tweets
