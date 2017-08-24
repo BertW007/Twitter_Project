@@ -1,5 +1,3 @@
-from datetime import datetime
-
 
 class Tweet(object):
     __id = None
@@ -55,10 +53,6 @@ class Tweet(object):
         
     @staticmethod
     def load_tweets_by_user_id(cursor, user_id):
-        # sql = "SELECT id, text, creation_date " \
-        #       "FROM Tweets " \
-        #       "WHERE Tweets.user_id ={} " \
-        #       "ORDER BY -Tweets.creation_date;".format(user_id)  # TODO Calculate number of comments for each tweet
         sql = "SELECT id, text, creation_date, " \
               "(SELECT count(*) FROM twitter_db.Comments WHERE Tweets.id=Comments.tweet_id) as 'comments' " \
               "FROM Tweets WHERE Tweets.user_id ={} ORDER BY -Tweets.creation_date;".format(user_id)
@@ -90,5 +84,3 @@ class Tweet(object):
 #             print(sql)
 #             cursor.execute(sql)
 #             return True
-        
-    
