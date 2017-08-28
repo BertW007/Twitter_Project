@@ -97,7 +97,12 @@ class Message(object):
         if self.__id == -1:
             sql_guery = """INSERT INTO Messages(sender_id,recipient_id,title,text,status,creation_date) 
                         VALUES('{}','{}','{}','{}','{}','{}');
-                        """.format(self.sender_id,self.recipient_id,self.title,self.text,self.status,self.creation_date)
+                        """.format(self.sender_id,
+                                   self.recipient_id,
+                                   self.title,
+                                   self.text,
+                                   self.status,
+                                   self.creation_date)
                 
             cursor.execute(sql_guery)
             self.__id = cursor.lastrowid

@@ -29,14 +29,19 @@ class User(object):
         if self.__id == -1:
             sql = """
                 INSERT INTO Users(name,hashed_password,email)
-                VALUES('{}','{}','{}');""".format(self.username, self.hashed_password, self.email)
+                VALUES('{}','{}','{}');""".format(self.username,
+                                                  self.hashed_password,
+                                                  self.email)
                 
             cursor.execute(sql)
             self.__id = cursor.lastrowid
             return True
         else:
             sql = "UPDATE Users SET name='{}',email='{}',hashed_password='{}'" \
-                  " WHERE user_id={};".format(self.username, self.email, self.hashed_password, self.__id)
+                  " WHERE user_id={};".format(self.username,
+                                              self.email,
+                                              self.hashed_password,
+                                              self.__id)
             print(sql)
             cursor.execute(sql)
             return True
