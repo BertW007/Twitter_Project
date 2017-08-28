@@ -1,13 +1,14 @@
-from flask import Flask, request, session, g, redirect, url_for, abort, \
-     render_template, flash, make_response
-from mysql.connector import connect
-from mysql.connector.errors import ProgrammingError
-from models.tweet import Tweet
-from models.user import User
+from datetime import datetime
+
+from flask import (Flask, abort, flash, g, make_response, redirect,
+                   render_template, request, session, url_for)
 from models.comment import Comment
 from models.crypto import check_password
 from models.message import Message
-from datetime import datetime
+from models.tweet import Tweet
+from models.user import User
+from mysql.connector import connect
+from mysql.connector.errors import ProgrammingError
 
 app = Flask(__name__)
 

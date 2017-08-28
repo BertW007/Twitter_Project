@@ -1,8 +1,9 @@
-from models.user import User
+from datetime import datetime
+
 from models.tweet import Tweet
+from models.user import User
 from mysql.connector import connect
 from mysql.connector.errors import ProgrammingError
-from datetime import datetime
 
 user = 'root'
 password = 'coderslab'
