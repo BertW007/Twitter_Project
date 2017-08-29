@@ -42,7 +42,7 @@ class Comment(object):
         if self.__id == -1:
             sql_guery = """INSERT INTO Comments(user_id,tweet_id,text,creation_date) 
                         VALUES('{}','{}','{}','{}');
-                        """.format(self.user_id,self.tweet_id,self.text,self.creation_date)
+                        """.format(self.user_id, self.tweet_id, self.text, self.creation_date)
                 
             cursor.execute(sql_guery)
             self.__id = cursor.lastrowid

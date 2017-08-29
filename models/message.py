@@ -12,12 +12,12 @@ class Message(object):
     
     def __init__(self):
         self.__id = -1
-        sender_id = 0
-        recipient_id = 0
-        title = ''
-        text = ''
-        status = False
-        creation_date = datetime.now()
+        self.sender_id = 0
+        self.recipient_id = 0
+        self.title = ''
+        self.text = ''
+        self.status = False
+        self.creation_date = datetime.now()
         
     @property
     def id(self):

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import (Flask, abort, flash, g, make_response, redirect,
+from flask import (Flask, redirect,
                    render_template, request, session, url_for)
 from models.comment import Comment
 from models.crypto import check_password
