@@ -2,11 +2,13 @@ from .crypto import password_hash
 
 
 class User(object):
-   
-    __id = None
-    username = None
-    __hashed_password = None
-    email = None
+    """
+    This class represents User in database.
+    """
+    # __id = None
+    # username = None
+    # __hashed_password = None
+    # email = None
     
     def __init__(self):
         self.__id = -1

@@ -1,9 +1,11 @@
-
 class Tweet(object):
-    __id = None
-    user_id = None
-    text = None
-    creation_date = None
+    """
+    This class represents Tweet in database.
+    """
+    # __id = None
+    # user_id = None
+    # text = None
+    # creation_date = None
     
     def __init__(self):
         self.__id = -1

@@ -2,13 +2,16 @@ from datetime import datetime
 
 
 class Message(object):
-    __id = None
-    sender_id = None
-    recipient_id = None
-    title = None
-    text = None
-    status = None
-    creation_date = None
+    """
+    This class represents Message in database.
+    """
+    # __id = None
+    # sender_id = None
+    # recipient_id = None
+    # title = None
+    # text = None
+    # status = None
+    # creation_date = None
     
     def __init__(self):
         self.__id = -1

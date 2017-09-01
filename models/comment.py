@@ -1,9 +1,12 @@
 class Comment(object):
-    __id = None
-    user_id = None
-    tweet_id = None
-    text = None
-    creation_date = None
+    """
+    This class represents Comment in database.
+    """
+    # __id = None
+    # user_id = None
+    # tweet_id = None
+    # text = None
+    # creation_date = None
     
     def __init__(self):
         self.__id = -1
