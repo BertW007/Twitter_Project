@@ -4,18 +4,18 @@
 It is a home made Twitter with some simple functions.
 
 ## 1. Set Up
-Set Up...
+Set Up instruction
 
 ## 2. Models
 Models are mapped into database.
-- ### 2.1 Tweet
-    Tweet model represents a single Tweet. It has four fields: id, author, text and creation date. One User can have many Tweets.
-- ### 2.2 Comment
-    Comment represents a single Comment. Like Tweet it has four fields  id, author, text and creation date. One Tweet can have many comments.
-- ### 2.3 Message
-    Message model represents a single Message. It has following fields: id, sender, recipient, title, text, status and creation date. One User can send and receive many Messages.
-- ### 2.4 User
-    User model represents an User. It has following fields: id, username, email, password.
+### 2.1 Tweet
+   Tweet model represents a single Tweet. It has four fields: id, author, text and creation date. One User can have many Tweets.
+### 2.2 Comment
+   Comment represents a single Comment. Like Tweet it has four fields  id, author, text and creation date. One Tweet can have many comments.
+### 2.3 Message
+   Message model represents a single Message. It has following fields: id, sender, recipient, title, text, status and creation date. One User can send and receive many Messages.
+### 2.4 User
+   User model represents an User. It has following fields: id, username, email, password.
 
 ## 3. Views
 All Views can be divided into three categories as follows.
@@ -39,6 +39,6 @@ All Views can be divided into three categories as follows.
 Features...
 
 ## 5.Tests
-Tests...
+Tests created wit TDD philosophy.
 
 @created by brzydal
