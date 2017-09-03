@@ -5,9 +5,9 @@ Project created as a part of Coders Lab boot camp in Warsaw.
 Set Up...
 
 ## 2. Models
-Models...
+Models are mapped into database.
 - ### 2.1 Tweet
-    Tweet...
+    Tweet
 - ### 2.2 Comment
     Comment...
 - ### 2.3 Message
@@ -18,23 +18,23 @@ Models...
     Crypto...
 
 ## 3. Views
-Views...
+All Views can be divided into four categories as follows.
 ### 3.1 User
-- /login/...
-- /logout/...
-- /register/...
-- /edit/...
+- /login/ - user login page
+- /logout/ - user logout page
+- /register/ - enables creating new user
+- /edit/ - enables editing existing user
 
 ### 3.2 Tweet
-- /all_tweets/
-- /tweets_by_user_id/<user_id>
-- /tweet_by_id/<tweet_id>
+- /all_tweets/ - showing all tweets
+- /tweets_by_user_id/<user_id> - showing all tweets created by specified user
+- /tweet_by_id/<tweet_id> - showing details e.g. comments, author etc. of a chosen tweet
 
 ### 3.3 Messages
-- /messages/
-- /message_by_id/<message_id>
-- /new_message/
--
+- /messages/ - showing all messages, received and send by current user
+- /message_by_id/<message_id> - showing details of a chosen message
+- /new_message/ - enables creation and sending new message
+
 ## 4.Features
 Features...
 
