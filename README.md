@@ -39,6 +39,6 @@ All Views can be divided into three categories as follows.
 Features...
 
 ## 5.Tests
-Tests created wit TDD philosophy.
+Tests created according with TDD philosophy.
 
 @created by brzydal
